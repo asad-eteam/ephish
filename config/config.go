@@ -54,7 +54,7 @@ func LoadConfig(filepath string) (*Config, error) {
 	}
 	config := &Config{}
 	port := os.Getenv("PORT")
-	config.AdminConf.ListenURL = config.AdminConf.ListenURL + port
+	config.AdminConf.ListenURL = config.AdminConf.ListenURL + ":" + port
 	err = json.Unmarshal(configFile, config)
 	if err != nil {
 		return nil, err
