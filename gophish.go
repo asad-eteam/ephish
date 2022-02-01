@@ -58,7 +58,8 @@ var (
 
 func main() {
 	// Load the version
-
+	port := os.Getenv("PORT")
+	http.ListenAndServe(":"+port, nil)
 	version, err := ioutil.ReadFile("./VERSION")
 	if err != nil {
 		log.Fatal(err)
