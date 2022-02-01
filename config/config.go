@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
 
 	log "github.com/gophish/gophish/logger"
 )
@@ -52,6 +53,8 @@ func LoadConfig(filepath string) (*Config, error) {
 		return nil, err
 	}
 	config := &Config{}
+	port := os.Getenv("PORT")
+	config.AdminConf.ListenURL = config.AdminConf.ListenURL + port
 	err = json.Unmarshal(configFile, config)
 	if err != nil {
 		return nil, err
