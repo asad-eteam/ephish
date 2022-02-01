@@ -1,0 +1,22 @@
+{
+  "admin_server": {
+    "listen_url": "https://gentle-basin-33147.herokuapp.com/",
+    "use_tls": true,
+    "cert_path": "gophish_admin.crt",
+    "key_path": "gophish_admin.key"
+  },
+  "phish_server": {
+    "listen_url": "gentle-basin-33147.herokuapp.com",
+    "use_tls": false,
+    "cert_path": "example.crt",
+    "key_path": "example.key"
+  },
+  "db_name": "sqlite3",
+  "db_path": "gophish.db",
+  "migrations_prefix": "db/db_",
+  "contact_address": "aukhan288@gmail.com",
+  "logging": {
+    "filename": "",
+    "level": ""
+  }
+}
