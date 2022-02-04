@@ -6,7 +6,7 @@
     "key_path": "gophish_admin.key"
   },
   "phish_server": {
-    "listen_url": "boiling-fjord-45993.herokuapp.com:$port",
+    "listen_url": "boiling-fjord-45993.herokuapp.com:443",
     "use_tls": false,
     "cert_path": "example.crt",
     "key_path": "example.key"
