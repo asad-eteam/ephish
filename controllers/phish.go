@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -63,12 +62,12 @@ func NewPhishingServer(config config.PhishServer, options ...PhishingServerOptio
 		WriteTimeout: 10 * time.Second,
 		Addr:         config.ListenURL,
 	}
-	ppORT := os.Getenv("PORT")
+	// ppORT := os.Getenv("PORT")
 	ps := &PhishingServer{
 		server: defaultServer,
 		config: config,
 	}
-	ps.config.ListenURL = ps.config.ListenURL + ppORT
+	// ps.config.ListenURL = ps.config.ListenURL + ppORT
 	for _, opt := range options {
 		opt(ps)
 	}

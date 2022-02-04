@@ -38,9 +38,14 @@
     </script>
   </head>
 
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
+  <body style="color:hsl(0deg 0% 20%); background-color: #f3f3f3">
+  <div class="d-flex" style="display: flex;">
+  <div style="flex:0.21">
+  {{template "nav" .}}
+  </div>
+  <div style="flex:1">
+  <div class="navbar navbar-inverse  " style="background-color:#f3f3f3;" role="navigation">
+      <div class="container-fluid" style="background-color:#fff">
         <div class="navbar-header">
           <button
             type="button"
@@ -53,8 +58,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <img class="navbar-logo" src="/images/logo_inv_small.png" />
-          <a class="navbar-brand" href="/">&nbsp;gophish</a>
+          {{/* <img class="navbar-logo" src="/images/logo_inv_small.png" /> */}}
+          <a class="navbar-brand" href="/" style="font-size:10px;text-align: center;">
+          {{/* CYBER TRUST</br><span>ALLI <i class="fa fa-lock"></i> NCE</span> */}}
+          {{/* <div style="color: #187d97">CYBER TRUST</div> */}}
+            {{/* <div class="a" style="background-color: #187d97"> */}}
+              {{/* ALLI <i class="fa fa-lock"></i> NCE */}}
+            {{/* </div> */}}
+          {{/* </a> */}}
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -63,12 +74,14 @@
                 type="text"
                 id="curruent_user_id"
                 value="{{.User.Role.Slug}}"
+                style="display:none"
               />
-              {{if .User}}
+              <a class="btn btn-primary" href="/settings"
+                  > {{.User.Username}}</a>
+              {{/* {{if .User}}
               <div class="btn-group" id="navbar-dropdown">
                 <a class="btn btn-primary" href="/settings"
-                  ><i class="fa fa-user"></i> {{.User.Username}}</a
-                >
+                  ><i class="fa fa-user"></i> {{.User.Username}}</a>
                 <a class="btn btn-primary dropdown-toggle" href="/logout">
                   <i class="fa fa-sign-out"></i>
                 </a>
@@ -77,13 +90,19 @@
               <a href="/login">
                 <button type="button" class="btn btn-primary">Login</button>
               </a>
-              {{end}}
+              {{end}} */}}
             </li>
           </ul>
         </div>
       </div>
     </div>
-    {{template "nav" .}} {{template "body" .}}
+    
+  {{template "body" .}}
+  
+  </div>
+  </div>
+    
+    
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/js/dist/vendor.min.js"></script>
     <script src="/js/dist/app/gophish.min.js"></script>

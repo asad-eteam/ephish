@@ -1,6 +1,16 @@
 {{define "body"}}
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-  <h1 class="page-header">Sending Profiles</h1>
+<div class="col-sm-12 col-md-12 main">
+  <p
+    style="
+      font-size: 26px;
+      font-family: -webkit-pictograph;
+      font-weight: 600;
+      margin-left: -15px;
+    "
+    class=""
+  >
+    Sending Profiles
+  </p>
   <div id="flashes" class="row"></div>
   <div class="row">
     {{if .ModifySystem}}
@@ -37,8 +47,11 @@
       No profiles created yet. Let's create one!
     </div>
   </div>
-  <div class="row">
-    <table id="profileTable" class="table" style="display: none">
+  <div
+    class="row"
+    style="background-color: #fff; padding: 15px; border-radius: 5px"
+  >
+    <table id="profileTable" class="table table-striped" style="display: none">
       <thead>
         <tr>
           <th class="col-md-4">Name</th>
@@ -47,7 +60,7 @@
           <th class="col-md-2 no-sort"></th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody style="color: #2a2a2ac7"></tbody>
     </table>
   </div>
 </div>

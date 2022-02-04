@@ -1,12 +1,15 @@
 {{define "body"}}
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="col-sm-12  col-md-12  main"style="background-color: #f3f3f3">
+    <div class="conatianer-fluid" style="padding:15px;">
     <div class="row">
-        <h1 class="page-header">
+        <p style="font-size: 26px; font-family: -webkit-pictograph; font-weight: 600">
             Campaigns
-        </h1>
+        </p>
+    </div>
     </div>
     <div id="flashes" class="row"></div>
     <div class="row">
+    <div class="conatianer-fluid" style="padding:15px;">
     {{if .ModifySystem}}
     {{/* admin */}}
         <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#modal"
@@ -20,8 +23,12 @@
             <i class="fa fa-plus"></i> New Campaign</button>
     {{end}}        
     </div>
+    </div>
     &nbsp;
 
+    <div class="conatianer-fluid" style="background-color:#fff;padding: 30px;
+    background-color: #fff;
+    border-radius: 5px;">
     <ul class="nav nav-tabs" role="tablist">
         <li class="active" role="activeCampaigns"><a href="#activeCampaigns" aria-controls="activeCampaigns" role="tab"
                 data-toggle="tab">Active Campaigns</a></li>
@@ -42,7 +49,7 @@
                 </div>
             </div>
             <div class="row">
-                <table id="campaignTable" class="table" style="display:none;">
+                <table id="campaignTable" class="table table-striped" style="background-color:#fff" style="display:none;">
                     <thead>
                         <tr>
                             <th class="col-md-3">Name</th>
@@ -54,7 +61,7 @@
                             <th class="col-md-3 no-sort"></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="color:#2a2a2ac7">
                     </tbody>
                 </table>
             </div>
@@ -83,6 +90,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <!-- Modal -->

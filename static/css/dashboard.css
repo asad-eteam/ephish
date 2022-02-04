@@ -7,7 +7,6 @@ body {
   padding-top: 50px;
 }
 
-
 /*
  * Global add-ons
  */
@@ -16,7 +15,6 @@ body {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
-
 
 /*
  * Sidebar
@@ -53,9 +51,8 @@ body {
 }
 .nav-sidebar > .active > a {
   color: #fff;
-  background-color: #283F50;
+  background-color: #75cb04;
 }
-
 
 /*
  * Main content
@@ -73,7 +70,6 @@ body {
 .main .page-header {
   margin-top: 0;
 }
-
 
 /*
  * Placeholder dashboard ideas
