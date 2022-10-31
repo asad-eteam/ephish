@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
@@ -113,15 +114,18 @@ func GetPage(id int64, uid int64) (Page, error) {
 // GetPageByName returns the page, if it exists, specified by the given name and user_id.
 func GetPageByName(n string, uid int64) (Page, error) {
 	p := Page{}
-	err := db.Where("user_id=? and name=?", uid, n).Find(&p).Error
+	err := db.Where("name=? and user_id=?", n, uid).Find(&p).Error //,
 	if err != nil {
 		log.Error(err)
 	}
+	fmt.Println("$$$$$$$$$$$$", p)
+	fmt.Printf("%+v", p)
 	return p, err
 }
 
 // PostPage creates a new page in the database.
 func PostPage(p *Page) error {
+
 	err := p.Validate()
 	if err != nil {
 		log.Error(err)
@@ -159,11 +163,34 @@ func DeletePage(id int64, uid int64) error {
 	return err
 }
 
-//***********
+// ***********
 // GetPageByName returns the page, if it exists, specified by the given name and user_id.
 func GetPageById(id int64) (Page, error) {
 	p := Page{}
 	err := db.Where("id=?", id).Find(&p).Error
+	if err != nil {
+		log.Error(err)
+	}
+	return p, err
+}
+func PostUserPage(pageName string, html string, userId int64, pageUrl string, CaptureCredentials bool, CapturePasswords bool) (Page, error) {
+	fmt.Println("1111111111", pageName)
+	fmt.Println("2222222222", userId)
+	p := Page{}
+	p.Name = pageName
+	p.UserId = userId
+	p.HTML = html
+	p.RedirectURL = pageUrl
+	p.CaptureCredentials = CaptureCredentials
+	p.CapturePasswords = CapturePasswords
+
+	// err := p.Validate()
+	// if err != nil {
+	// 	log.Error(err)
+	// 	return err
+	// }
+	// Insert into the DB
+	err := db.Save(&p).Error
 	if err != nil {
 		log.Error(err)
 	}

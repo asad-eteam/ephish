@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="./BrothersideSignature-w13o6.otf">
+
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+   <style>
+    body{
+        display: flex;
+        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+    #a{
+        background-image: url('../../static/images/bg.jpg');
+        background-size: cover;
+        padding-top: 170px;
+ 
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding-left: 25%;
+    }
+   </style>
+</head>
+<body>
+    
+    <div id="aa" style="width: 60%;  border: 2px solid #778899; padding: 5px;">
+      <div style="border: 8px solid #778899; padding: 8px;">
+        <div style="border: 8px solid #9eabb9;padding-left: 4%; ">
+          <div id="a">
+              <div style="margin-bottom: 3rem;">
+                <p style="color: #0009;
+                font-weight: 400;
+                font-size: 1.5rem;
+                font-family: sans-serif;
+                line-height: 0px; margin-bottom: 20px;">Cirtificate of Completion</p>
+                <p style="color: #0009;
+                font-weight: 400;
+                font-size: 1.2rem;
+                font-family: sans-serif;
+                line-height: 0px;margin-bottom: 20px;">congratulations, {{.FirstName}} {{.LastName}}</p>
+              </div>
+              <div style="margin-bottom: 3rem;">
+                <p style="color: #0009;
+                font-weight: 700;
+                font-size: 1.5rem;
+                font-family: sans-serif;
+                line-height: 0px;">Avoiding Phishing Scams</p>
+                <p id="coursTime">Course Completed on {{.CreatedDate}}</p>
+              </div>
+              <div>
+                <p style="color: #0009;
+                font-weight: 400;
+                font-size: 1rem;
+                font-family: sans-serif;
+                line-height: 24px;
+                margin-bottom: 20px;">By continuing to learn, you have expended your perspective, sharpened <br>
+                your skills, and made yourself even more in demand.
+                </p>
+                
+              </div>
+            
+                <table class="table-sm w-50">
+                <tbody>
+                  <tr>
+                    <td>Full Name :</td>
+                    <td>{{.FirstName}} {{.LastName}}</td>
+                  </tr>
+                  <tr>
+                    <td>Email :</td>
+                    <td>{{.Email}}</td>
+                  </tr>
+                  <tr>
+                    <td>Position :</td>
+                    <td>{{.Position}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="container mt-5">
+                <div class="row">
+                    <div class="col-sm-8 pl-0">
+                        <p style="text-decoration: line-through;
+                        font-family: inherit;
+                        font-style: oblique;">Riaz Salim</p>
+                      <p>Head of Content Strategy, </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p style="color: #0009;
+                        font-weight: 400;
+                        font-size: 1rem;
+                        font-family: sans-serif;
+                        line-height: 0px;
+                        margin-bottom: 25px;">Phishing Learning</p>
+                        <p style="color: #0009;
+                        font-weight: 400;
+                        font-size: 1rem;
+                        font-family: sans-serif;
+                        line-height: 0px;
+                        margin-bottom: 25px;">1000 W maude</p>
+                        <p style="color: #0009;
+                        font-weight: 400;
+                        font-size: 1rem;
+                        font-family: sans-serif;
+                        line-height: 0px;
+                        margin-bottom: 25px;">Sunnyvale, CA 22434</p>
+                    </div>
+                </div>
+              </div>
+              <p style="margin-top: 10rem; margin-bottom: 20px;">Certificate ID: {{.RId}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <button id="download">download</button> -->
+    <form action="https://127.0.0.1:3333/quiz/certificate?rid=fwg5qNR" method="post">
+        <!-- <button type="submit">submit</button> -->
+    </form>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script>
+
+</script>
+   <script>
+    // $('#coursTime').text(new Date().toLocaleTimeString([], { day:"2-digit",month:"short",year:"2-digit", hour: '2-digit', minute: "2-digit", hour12: true }))
+   
+   console.log('rrrrrr','{{.CreatedDate}}')
+    $('#download').click(function() {
+      var pdf = new jsPDF('l', 'pt', 'a4');
+        var options = {
+            pagesplit: false,
+            
+        };
+        pdf.addHTML($('#aa'), 0, 0, options, function(){
+            pdf.save("test.pdf");
+        });
+
+});
+
+   </script>
+</body>
+</html>

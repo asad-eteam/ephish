@@ -39,11 +39,11 @@
   </head>
 
   <body style="color:hsl(0deg 0% 20%); background-color: #f3f3f3">
-  <div class="d-flex" style="display: flex;">
-  <div style="flex:0.21">
+  <div class="d-flex row" style="display: flex;">
+  <div  class="col-sm-2 col-xs-2">
   {{template "nav" .}}
   </div>
-  <div style="flex:1">
+  <div  class="col-sm-10 col-xs-10">
   <div class="navbar navbar-inverse  " style="background-color:#f3f3f3;" role="navigation">
       <div class="container-fluid" style="background-color:#fff">
         <div class="navbar-header">
@@ -76,9 +76,8 @@
                 value="{{.User.Role.Slug}}"
                 style="display:none"
               />
-              <a class="btn btn-primary" href="/settings"
-                  > {{.User.Username}}</a>
-              {{/* {{if .User}}
+        
+              {{if .User}}
               <div class="btn-group" id="navbar-dropdown">
                 <a class="btn btn-primary" href="/settings"
                   ><i class="fa fa-user"></i> {{.User.Username}}</a>
@@ -90,7 +89,7 @@
               <a href="/login">
                 <button type="button" class="btn btn-primary">Login</button>
               </a>
-              {{end}} */}}
+              {{end}} 
             </li>
           </ul>
         </div>

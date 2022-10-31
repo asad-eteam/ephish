@@ -167,6 +167,7 @@ func (c *Campaign) UpdateStatus(s string) error {
 
 // AddEvent creates a new campaign event in the database
 func AddEvent(e *Event, campaignID int64) error {
+	fmt.Println("****@@@@@@@@@@################")
 	e.CampaignId = campaignID
 	e.Time = time.Now().UTC()
 
@@ -314,6 +315,7 @@ func getCampaignStats(cid int64) (CampaignStats, error) {
 
 // GetCampaigns returns the campaigns owned by the given user.
 func GetCampaigns(uid int64) ([]Campaign, error) {
+	fmt.Println("11111111111111")
 	cs := []Campaign{}
 	err := db.Model(&User{Id: uid}).Related(&cs).Error
 	if err != nil {
@@ -331,12 +333,42 @@ func GetCampaigns(uid int64) ([]Campaign, error) {
 // GetCampaignSummaries gets the summary objects for all the campaigns
 // owned by the current user
 func GetCampaignSummaries(uid int64) (CampaignSummaries, error) {
+	fmt.Println("2222222222222")
 	overview := CampaignSummaries{}
 	cs := []CampaignSummary{}
 	// Get the basic campaign information
 	query := db.Table("campaigns")
-	//.Where("user_id = ? OR user_id = ?", uid, 1)
-	query = query.Select("id,user_id, name,username,page_id,template_id, created_date, launch_date, send_by_date, completed_date, status,thumbnail")
+	if uid == 1 {
+		query = query.Select("id,user_id, name,username,page_id,template_id, created_date, launch_date, send_by_date, completed_date, status").Order("created_date DESC")
+	} else if uid != 1 {
+		query = query.Where("user_id = ? OR user_id = ?", uid, 1)
+		query = query.Select("id,user_id, name,page_id,template_id, created_date, launch_date, send_by_date, completed_date, status").Order("created_date DESC")
+	}
+	err := query.Scan(&cs).Error
+	if err != nil {
+		log.Error(err)
+		return overview, err
+	}
+	for i := range cs {
+		s, err := getCampaignStats(cs[i].Id)
+		if err != nil {
+			log.Error(err)
+			return overview, err
+		}
+		cs[i].Stats = s
+	}
+	overview.Total = int64(len(cs))
+	overview.Campaigns = cs
+	return overview, nil
+}
+func GetMobileCampaignSummaries(uid int64) (CampaignSummaries, error) {
+	fmt.Println("2222222222222")
+
+	overview := CampaignSummaries{}
+	cs := []CampaignSummary{}
+	// Get the basic campaign information
+	query := db.Table("campaigns").Where("user_id = ?", uid)
+	query = query.Select("id,user_id, name,page_id,template_id, created_date, launch_date, send_by_date, completed_date, status")
 	err := query.Scan(&cs).Error
 	if err != nil {
 		log.Error(err)
@@ -357,6 +389,7 @@ func GetCampaignSummaries(uid int64) (CampaignSummaries, error) {
 
 // GetCampaignSummary gets the summary object for a campaign specified by the campaign ID
 func GetCampaignSummary(id int64, uid int64) (CampaignSummary, error) {
+	fmt.Println("33333333333")
 	cs := CampaignSummary{}
 	query := db.Table("campaigns").Where("user_id = ? AND id = ?", uid, id)
 	query = query.Select("id, name, created_date, launch_date, send_by_date, completed_date, status")
@@ -408,38 +441,75 @@ func GetCampaignMailContext(id int64, uid int64) (Campaign, error) {
 
 // GetCampaign returns the campaign, if it exists, specified by the given id and user_id.
 func GetCampaign(id int64, uid int64) (Campaign, error) {
+
 	c := Campaign{}
-	err := db.Where("id = ?", id).Where("user_id = ?", uid).Find(&c).Error
-	if err != nil {
-		log.Errorf("%s: campaign not found", err)
+	if uid == 1 {
+		err := db.Where("id = ?", id).Find(&c).Error
+		if err != nil {
+			log.Errorf("%s: campaign not found", err)
+			return c, err
+		}
+		err = c.getDetails()
 		return c, err
+	} else if uid > 1 {
+		err := db.Where("id = ?", id).Where("user_id = ?", uid).Find(&c).Error
+		if err != nil {
+			log.Errorf("%s: campaign not found", err)
+			return c, err
+		}
+		err = c.getDetails()
+
 	}
-	err = c.getDetails()
-	return c, err
+	return c, nil
+
 }
 
 // GetCampaignResults returns just the campaign results for the given campaign
 func GetCampaignResults(id int64, uid int64) (CampaignResults, error) {
+	fmt.Println("nnnnnnnnnn")
 	cr := CampaignResults{}
-	err := db.Table("campaigns").Where("id=? and user_id=?", id, uid).Find(&cr).Error
-	if err != nil {
-		log.WithFields(logrus.Fields{
-			"campaign_id": id,
-			"error":       err,
-		}).Error(err)
+	if uid == 1 {
+		err := db.Table("campaigns").Where("id=?", id).Find(&cr).Error
+		if err != nil {
+			log.WithFields(logrus.Fields{
+				"campaign_id": id,
+				"error":       err,
+			}).Error(err)
+			return cr, err
+		}
+		err = db.Table("results").Where("campaign_id=?", cr.Id).Find(&cr.Results).Error
+		if err != nil {
+			log.Errorf("%s: results not found for campaign", err)
+			return cr, err
+		}
+		err = db.Table("events").Where("campaign_id=?", cr.Id).Find(&cr.Events).Error
+		if err != nil {
+			log.Errorf("%s: events not found for campaign", err)
+			return cr, err
+		}
+		return cr, err
+	} else if uid > 1 {
+		err := db.Table("campaigns").Where("id=? and user_id=?", id, uid).Find(&cr).Error
+		if err != nil {
+			log.WithFields(logrus.Fields{
+				"campaign_id": id,
+				"error":       err,
+			}).Error(err)
+			return cr, err
+		}
+		err = db.Table("results").Where("campaign_id=? and user_id=?", cr.Id, uid).Find(&cr.Results).Error
+		if err != nil {
+			log.Errorf("%s: results not found for campaign", err)
+			return cr, err
+		}
+		err = db.Table("events").Where("campaign_id=?", cr.Id).Find(&cr.Events).Error
+		if err != nil {
+			log.Errorf("%s: events not found for campaign", err)
+			return cr, err
+		}
 		return cr, err
 	}
-	err = db.Table("results").Where("campaign_id=? and user_id=?", cr.Id, uid).Find(&cr.Results).Error
-	if err != nil {
-		log.Errorf("%s: results not found for campaign", err)
-		return cr, err
-	}
-	err = db.Table("events").Where("campaign_id=?", cr.Id).Find(&cr.Events).Error
-	if err != nil {
-		log.Errorf("%s: events not found for campaign", err)
-		return cr, err
-	}
-	return cr, err
+	return cr, nil
 }
 
 // GetQueuedCampaigns returns the campaigns that are queued up for this given minute
@@ -466,6 +536,7 @@ func PostCampaign(c *Campaign, uid int64) error {
 	if err != nil {
 		return err
 	}
+
 	if u.Role.Slug == "admin" {
 		e := SubmitAdminCampaign(c, uid)
 		return e
@@ -535,24 +606,42 @@ func CompleteCampaign(id int64, uid int64) error {
 }
 
 func SubmitUserCampaign(c *Campaign, uid int64) error {
+	c.URL = "http://whogotphished.com:3000"
 	p := Page{}
 	t := Template{}
+
 	// err := c.Validate()
 	// if err != nil {
 	// 	return err
 	// }
+
 	p, err := GetPageById(c.Page.Id)
 	u, err := GetUser(uid)
 	if err != nil {
 		return err
 	}
+	pageName := p.Name
+	html := p.HTML
+	userId := uid
+	pageUrl := p.RedirectURL
+	CaptureCredentials := p.CaptureCredentials
+	CapturePasswords := p.CapturePasswords
+	p, e := PostUserPage(pageName, html, userId, pageUrl, CaptureCredentials, CapturePasswords)
+	if e != nil {
+		return e
+	}
+	fmt.Println("************")
+	// fmt.Print("ccccccccccccc", createPage)
+	// fmt.Printf("%+v", createPage)
 	// Fill in the details
 	c.UserId = uid
 	c.Username = u.Username
-	c.URL = p.RedirectURL
+
+	// c.URL = p.RedirectURL
 	c.CreatedDate = time.Now().UTC()
 	c.CompletedDate = time.Time{}
 	c.Status = CampaignQueued
+
 	if c.LaunchDate.IsZero() {
 		c.LaunchDate = c.CreatedDate
 	} else {
@@ -656,6 +745,7 @@ func SubmitUserCampaign(c *Campaign, uid int64) error {
 				UserId:       c.UserId,
 				SendDate:     sendDate,
 				Reported:     false,
+				GroupName:    g.Name,
 				ModifiedDate: c.CreatedDate,
 			}
 			err = r.GenerateId(tx)
@@ -703,7 +793,6 @@ func SubmitUserCampaign(c *Campaign, uid int64) error {
 	return tx.Commit().Error
 }
 func SubmitAdminCampaign(c *Campaign, uid int64) error {
-	fmt.Printf("%+v", c)
 	fmt.Println("SubmitAdminCampaign : qqqqqqqqq", uid)
 	err := c.Validate()
 	if err != nil {
@@ -822,6 +911,7 @@ func SubmitAdminCampaign(c *Campaign, uid int64) error {
 				UserId:       c.UserId,
 				SendDate:     sendDate,
 				Reported:     false,
+				GroupName:    g.Name,
 				ModifiedDate: c.CreatedDate,
 			}
 			err = r.GenerateId(tx)

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/gophish/gophish/auth"
 	log "github.com/gophish/gophish/logger"
 )
 
@@ -60,6 +61,16 @@ func GetUserByUsername(username string) (User, error) {
 func PutUser(u *User) error {
 	err := db.Save(u).Error
 	return err
+}
+
+func MobileLogin(username string, password string) (User, error) {
+	u := User{}
+	err := db.Preload("Role").Where("username = ?", username).First(&u).Error
+	err = auth.ValidatePassword(password, u.Hash)
+	if err != nil {
+		return u, err
+	}
+	return u, err
 }
 
 // EnsureEnoughAdmins ensures that there is more than one user account in
@@ -159,4 +170,22 @@ func DeleteUser(id int64) error {
 	// Finally, delete the user
 	err = db.Where("id=?", id).Delete(&User{}).Error
 	return err
+}
+
+type Contact struct {
+	UserId     int64  `json:"userId"`
+	CampaignId int64  `json:"campaignId"`
+	Message    string `json:"message"`
+}
+
+func AddMessag(userid int64, campaignid int64, message string) (Contact, error) {
+	c := &Contact{}
+	c.UserId = userid
+	c.CampaignId = campaignid
+	c.Message = message
+	err := db.Save(&c).Error
+	if err != nil {
+		return Contact{}, nil
+	}
+	return Contact{}, nil
 }

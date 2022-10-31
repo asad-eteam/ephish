@@ -3,6 +3,7 @@ package models
 import (
 	"crypto/rand"
 	"encoding/json"
+	"fmt"
 	"math/big"
 	"net"
 	"time"
@@ -27,7 +28,7 @@ type Result struct {
 	Id           int64     `json:"-"`
 	CampaignId   int64     `json:"-"`
 	UserId       int64     `json:"-"`
-	RId          string    `json:"id"`
+	RId          string    `json:"r_id"`
 	Status       string    `json:"status" sql:"not null"`
 	IP           string    `json:"ip"`
 	Latitude     float64   `json:"latitude"`
@@ -35,6 +36,7 @@ type Result struct {
 	SendDate     time.Time `json:"send_date"`
 	Reported     bool      `json:"reported" sql:"not null"`
 	ModifiedDate time.Time `json:"modified_date"`
+	GroupName    string    `json:""`
 	BaseRecipient
 }
 
@@ -145,11 +147,13 @@ func (r *Result) HandleEmailReport(details EventDetails) error {
 	r.Reported = true
 	r.ModifiedDate = event.Time
 	return db.Save(r).Error
+
 }
 
 // UpdateGeo updates the latitude and longitude of the result in
 // the database given an IP address
 func (r *Result) UpdateGeo(addr string) error {
+
 	// Open a connection to the maxmind db
 	mmdb, err := maxminddb.Open("static/db/geolite2-city.mmdb")
 	if err != nil {
@@ -207,4 +211,12 @@ func GetResult(rid string) (Result, error) {
 	r := Result{}
 	err := db.Where("r_id=?", rid).First(&r).Error
 	return r, err
+}
+
+func CheckResultByRId(rid string) error {
+	fmt.Println(rid)
+	r := Result{}
+	result := db.Where("r_id=?", rid).First(&r).Error
+	fmt.Println("aaaaaaaaaaaa", result)
+	return nil
 }

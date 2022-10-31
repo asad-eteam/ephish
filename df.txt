@@ -1,0 +1,15 @@
+[Unit]
+Description=GophishService
+ConditionPathExists=/home/eteamid/ephish
+After=network.target
+[Service]
+Type=simple
+WorkingDirectory=/home/eteamid/ephish
+ExecStart=/eteamid/ephish/gophish .
+Restart=on-failure
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=appgoservice
+[Install]
+WantedBy=multi-user.target

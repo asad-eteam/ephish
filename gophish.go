@@ -115,9 +115,7 @@ func main() {
 	adminConfig := conf.AdminConf
 	adminServer := controllers.NewAdminServer(adminConfig, adminOptions...)
 	middleware.Store.Options.Secure = adminConfig.UseTLS
-	port := os.Getenv("PORT")
 	phishConfig := conf.PhishConf
-	phishConfig.ListenURL = phishConfig.ListenURL + port
 	phishServer := controllers.NewPhishingServer(phishConfig)
 
 	imapMonitor := imap.NewMonitor()

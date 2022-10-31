@@ -108,16 +108,16 @@
                 <div class="form-group">
                 {{/* <div class="row"> */}}
                         {{/* <div class="col-md-6"> */}}
+                   {{if .ModifySystem}}
                             <label for="name">Name:</label>
                     <input type="text" class="form-control" id="name" placeholder="Campaign name" autofocus>
-                        {{/* </div>
-                        <div class="col-md-6"> */}}
-                            <label class="control-label" for="delay">Choose Image
-                            </label>
-                            {{/* <input type="file" class="form-control" id="thumbnail" autocomplete="random-data"/> <!--Chrome ignores autocomplete="off".--> */}}
-                        {{/* </div> */}}
-                    {{/* </div> */}}
-                    
+                    {{else}}
+                    <p style="color:#1abc9c; font-size:50px; font-weight:700" id="userCampaignName"></p>
+                    {{end}}
+
+
+                
+                    {{if .ModifySystem}}
                     <label class="control-label" for="template">Email Template:</label>
                     <select class="form-control" placeholder="Template Name" id="template" />
                     <option></option>
@@ -130,9 +130,10 @@
                         <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Location of Gophish listener (must be reachable by targets!)"></i>
                     </label>
                     <input type="text" class="form-control" placeholder="http://192.168.1.1" id="url" />
+                    {{end}} 
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="control-label" for="url">Launch Date </label>
+                            <label class="control-label" for="url">Select Campaign Date </label>
                             <input type="text" class="form-control" id="launch_date" />
                         </div>
                         <div class="col-md-6">
@@ -159,8 +160,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="dismiss()">Close</button>
+                {{if .ModifySystem}}
                 <button type="button" id="launchButton" class="btn btn-primary" onclick="launch()">
                     <i class="fa fa-rocket"></i> Launch Campaign</button>
+                {{else}}
+                <button type="button" id="launchButton" class="btn btn-primary" onclick="schedule_campaign()">
+                        <i class="fa fa-rocket"></i> Scheduale Campaign</button>
+                {{end}}
             </div>
         </div>
     </div>
@@ -184,84 +190,6 @@
             </div>
             <div class="modal-footer">
                 {{/* <button type="button" class="btn btn-default" data-dismiss="modal" onclick="dismiss()">Close</button> */}}
-                
-            </div>
-        </div>
-    </div>
-</div>
-<!--User Campaign Modal -->
-<div class="modal fade" id="usercamp_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="dismiss()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="campaignModalLabel">New Campaign</h4>
-            </div>
-            <div class="modal-body"  id="defaultCampaigns">
-            <div class="form-group">
-                    
-                  
-                    {{/* <div class="row"> */}}
-                        {{/* <div class="col-md-6"> */}}
-                        {{/* <label for="name">Name:</label> */}}
-                        <p style="color:#1abc9c; font-size:50px; font-weight:700" id="userCampaignName"></p>
-                        {{/* <input type="text" class="form-control" id="userCampaignName" placeholder="Campaign name" autofocus> */}}
-                        <option></option>
-                        </select>
-                            <label class="control-label" for="url">Launch Date </label>
-                            <input type="text" class="form-control" id="userCampagn_launch_date" />
-                        {{/* </div> */}}
-                        {{/* <div class="col-md-6"> <img id="uCimage" style="height: 150px !important;width:150px" class="img-responsive pull-right" /> </div> */}}
-                     
-                    {{/* </div> */}}
-                    <label class="control-label" for="userProfiles">Sending Profile:</label>
-                    <div class="input-group">
-                        <select class="form-control" id="userProfiles"  placeholder="Sending Profile"  style="box-sizing: border-box;
-                        border: none;
-                        font-size: 100%;
-                        margin-top: 5px;
-                        padding: 0;
-                        width: 100%;
-                        border: 1px solid #aaaa;
-                        border-radius: 5px;
-                        padding-top: 10px;
-                        padding-bottom: 10px;
-                        padding-left: 5px;">
-                        </select>
-                        <span class="input-group-btn">
-                            <button style="background-color:#48c9b0; color:#fff" type="button" data-toggle="modal" data-backdrop="static" data-target="#sendTestEmailModal"
-                                class="btn btn-primary button">
-                                <i class="fa fa-envelope"></i> Send Test Email</button>
-                        </span>
-                    </div>
-                    <label class="control-label" for="usersg">Groups:</label>
-                   
-                   <select multiple="multiple" id="usersg" class="form-control" placeholder="Select Group" style="box-sizing: border-box;
-                        border: none;
-                        font-size: 100%;
-                        margin-top: 5px;
-                        padding: 0;
-                        width: 100%;
-                        border: 1px solid #aaaa;
-                        border-radius: 5px;
-                        padding-top: 10px;
-                        padding-bottom: 10px;
-                        padding-left: 5px;">
-                   </select>
-                </div>
-               
-            </div>
-            <div class="modal-footer">
-            <button type="button" data-toggle="modal" data-backdrop="static" data-target="#sendTestCampaignModal"
-                                class="btn btn-primary button">
-                                <i class="fa fa-envelope"></i> Send Test Campaign</button>
-                    
-            <button type="button" id="launchButton" class="btn btn-primary" onclick="schedule_campaign()">
-            {{/* onclick="launch()" */}}
-                    <i class="fa fa-rocket"></i> Scheduale Campaign</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="dismiss()">Close</button>
                 
             </div>
         </div>

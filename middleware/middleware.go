@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	ctx "github.com/gophish/gophish/context"
 	"github.com/gophish/gophish/models"
 	"github.com/gorilla/csrf"
+	"github.com/gorilla/sessions"
 )
 
 // CSRFExemptPrefixes are a list of routes that are exempt from CSRF protection
@@ -112,7 +114,17 @@ func RequireAPIKey(handler http.Handler) http.Handler {
 // RequireLogin checks to see if the user is currently logged in.
 // If not, the function returns a 302 redirect to the login page.
 func RequireLogin(handler http.Handler) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
+		session := ctx.Get(r, "session").(*sessions.Session)
+		c := &http.Cookie{}
+		if session.Options.MaxAge > time.Now().Second() {
+			t := time.Duration(45*60) * time.Second
+			c.Expires = time.Now().Add(t)
+
+		}
+		fmt.Println(session.Options.MaxAge)
+		session.Save(r, w)
 		if u := ctx.Get(r, "user"); u != nil {
 			// If a password change is required for the user, then redirect them
 			// to the login page

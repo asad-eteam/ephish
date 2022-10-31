@@ -87,9 +87,16 @@ func (as *Server) registerRoutes() {
 	router.HandleFunc("/webhooks/", mid.Use(as.Webhooks, mid.RequirePermission(models.PermissionModifySystem)))
 	router.HandleFunc("/webhooks/{id:[0-9]+}/validate", mid.Use(as.ValidateWebhook, mid.RequirePermission(models.PermissionModifySystem)))
 	router.HandleFunc("/webhooks/{id:[0-9]+}", mid.Use(as.Webhook, mid.RequirePermission(models.PermissionModifySystem)))
-	// router.HandleFunc("/sso", mid.Use(as.Sso))
-	// router.HandleFunc("/login", mid.Use(as.Sso, as.limiter.Limit))
-	// router.HandleFunc("/sso", as.Sso)
+
+	router.HandleFunc("/questions/", as.Questions)
+	router.HandleFunc("/question/{id:[0-9]+}", as.Question)
+	router.HandleFunc("/quiz/{id:[0-9]+}", as.Quiz)
+	// Mobile api's
+	router.HandleFunc("/login", as.Login)
+	router.HandleFunc("/mobileCampaigns", as.mobileCampaigns)
+	router.HandleFunc("/mobileCampaigns/{id:[0-9]+}", as.mobileCampaignResults)
+	router.HandleFunc("/contacts", as.contact)
+
 	as.handler = router
 }
 

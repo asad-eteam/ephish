@@ -122,8 +122,10 @@ func (as *AdminServer) Shutdown() error {
 // SetupAdminRoutes creates the routes for handling requests to the web interface.
 // This function returns an http.Handler to be used in http.ListenAndServe().
 func (as *AdminServer) registerRoutes() {
+
 	router := mux.NewRouter()
-	// Base Front-end routes
+	fs := http.FileServer(http.Dir("./static/"))
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 	router.HandleFunc("/", mid.Use(as.Base, mid.RequireLogin))
 	router.HandleFunc("/login", mid.Use(as.Login, as.limiter.Limit))
 	router.HandleFunc("/sso", mid.Use(as.Sso, as.limiter.Limit))
@@ -139,13 +141,18 @@ func (as *AdminServer) registerRoutes() {
 	router.HandleFunc("/users", mid.Use(as.UserManagement, mid.RequirePermission(models.PermissionModifySystem), mid.RequireLogin))
 	router.HandleFunc("/webhooks", mid.Use(as.Webhooks, mid.RequirePermission(models.PermissionModifySystem), mid.RequireLogin))
 	router.HandleFunc("/impersonate", mid.Use(as.Impersonate, mid.RequirePermission(models.PermissionModifySystem), mid.RequireLogin))
+	router.HandleFunc("/contacts", mid.Use(as.Contacts, mid.RequireLogin))
+	router.HandleFunc("/questions", mid.Use(as.Questions, mid.RequireLogin))
+	router.HandleFunc("/report", as.Report)
+	router.HandleFunc("/test", as.Test)
+	router.HandleFunc("/quiz", as.quiz)
+	router.HandleFunc("/quiz/certificate", mid.Use(as.Certificate))
 	// Create the API routes
 	api := api.NewServer(
 		api.WithWorker(as.worker),
 		api.WithLimiter(as.limiter),
 	)
 	router.PathPrefix("/api/").Handler(api)
-
 	// Setup static file serving
 	router.PathPrefix("/").Handler(http.FileServer(unindexed.Dir("./static/")))
 
@@ -245,6 +252,40 @@ func (as *AdminServer) SendingProfiles(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
 	params.Title = "Sending Profiles"
 	getTemplate(w, "sending_profiles").ExecuteTemplate(w, "base", params)
+}
+func (as *AdminServer) Report(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./templates/report.html")
+}
+func (as *AdminServer) Test(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("./templates/test/index.html")
+	t.Execute(w, nil)
+}
+func (as *AdminServer) quiz(w http.ResponseWriter, r *http.Request) {
+	rid := r.URL.Query().Get("rid")
+	id := r.URL.Query().Get("id")
+	result, e := models.GetResult(rid)
+	if e != nil {
+		fmt.Println(e)
+	}
+	if result.RId != rid {
+		t, _ := template.ParseFiles("./templates/quiz/message.html")
+		t.Execute(w, nil)
+		return
+	}
+	t, _ := template.ParseFiles("./templates/quiz/" + id + ".html")
+	t.Execute(w, nil)
+
+}
+func (as *AdminServer) Certificate(w http.ResponseWriter, r *http.Request) {
+
+	rid := r.URL.Query().Get("rid")
+
+	certificate, e := models.PostCertificate(rid)
+	if e != nil {
+		fmt.Println(e)
+	}
+	t, _ := template.ParseFiles("./templates/quiz/certificate.html")
+	t.Execute(w, certificate)
 }
 
 // Settings handles the changing of settings
@@ -364,6 +405,7 @@ func (as *AdminServer) Login(w http.ResponseWriter, r *http.Request) {
 		Token   string
 	}{Title: "Login", Token: csrf.Token(r)}
 	session := ctx.Get(r, "session").(*sessions.Session)
+
 	switch {
 	case r.Method == "GET":
 		params.Flashes = session.Flashes()
@@ -526,4 +568,35 @@ func (as *AdminServer) Sso(w http.ResponseWriter, r *http.Request) {
 	as.nextOrIndex(w, r)
 	// http.Redirect(w, r, "https://google.com", http.StatusFound)
 
+}
+
+func mobLogin(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("eeeeeeeeeeeee", r.URL.Query())
+	username := strings.ToLower(r.URL.Query()["name"][0])
+	u, err := models.GetUserByUsername(username)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if u.AccountLocked {
+		return
+	}
+	u.LastLogin = time.Now().UTC()
+	err = models.PutUser(&u)
+	if err != nil {
+		log.Error(err)
+	}
+	session := ctx.Get(r, "session").(*sessions.Session)
+	session.Values["id"] = u.Id
+	session.Save(r, w)
+}
+func (as *AdminServer) Contacts(w http.ResponseWriter, r *http.Request) {
+	params := newTemplateParams(r)
+	params.Title = "Contacts"
+	getTemplate(w, "Contacts").ExecuteTemplate(w, "base", params)
+}
+func (as *AdminServer) Questions(w http.ResponseWriter, r *http.Request) {
+	params := newTemplateParams(r)
+	params.Title = "Questions"
+	getTemplate(w, "Questions").ExecuteTemplate(w, "base", params)
 }

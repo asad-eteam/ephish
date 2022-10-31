@@ -1,0 +1,263 @@
+<html lang="en">
+
+<head>
+    <title>Gophish-quiz</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <style>
+        body {
+            background-color: #eee;
+            display: flex;
+            color: #0008;
+            min-height: 100vh;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .ques {
+            text-align: center;
+            color: #fff;
+            font-size: 30px;
+            line-height: 0px;
+            margin-bottom: 30px !important;
+            font-family: 'Overpass Mono', monospace;
+            margin-top: 20px;
+        }
+
+        .mainDesc {
+            line-height: 18px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 400;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .phishBtn {
+            color: #5db0b1;
+            margin: 0px 8px 0px 8px;
+            border: none;
+            border-radius: 3px;
+            padding: 12px 40px 12px 40px;
+        }
+
+        .contentContainer {
+            padding-top: 20px;
+            margin-top: -50px;
+            background-color: #ffffff;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .contentOuterLayer {
+            background-color: #eee;
+            width: 100%;
+            padding: 40px 0px 40px 0px;
+            margin-top: 30px;
+        }
+
+        .senderContainer {
+            display: flex;
+            padding-left: 10px;
+        }
+
+        .toMe {
+            display: flex;
+            margin-left: 10px
+        }
+
+        .fotterLink {
+            color: #328183 !important
+        }
+
+        .footerLeft {
+            width: 50%;
+            display: flex;
+            justify-content: end;
+            padding-right: 30px;
+        }
+
+        .footerRight {
+            display: flex;
+            width: 50%;
+            align-items: center;
+        }
+
+        .userSpan {
+            background-color: #5db0b1;
+            padding: 6px 8px 6px 8px;
+            border-radius: 5px;
+            margin-right: 10px;
+            height: fit-content;
+        }
+
+        .quizContainer {
+            background-color: #ffffff;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px 20px 42px 20px;
+            box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .ques {
+                font-size: 24px !important;
+                line-height: 26px !important;
+            }
+
+            .mainDesc {
+                font-size: 14px !important;
+                line-height: 18px !important;
+            }
+
+            .phishBtn {
+                padding: 6px 20px 6px 20px;
+                font-size: 14px;
+            }
+
+            .contentContainer {
+                width: 90% !important;
+                margin-bottom: 20px;
+            }
+
+            .contentOuterLayer {
+                padding: 40px 12px 40px 12px !important;
+
+            }
+
+            .senderContainer {
+                font-size: 10px;
+            }
+
+            #quizTime {
+                font-size: 10px;
+                line-height: 37px;
+            }
+
+            .toMe {
+                font-size: 10px;
+            }
+
+            .footerLeft {
+                justify-content: center;
+                width: 100% !important;
+            }
+
+            .footerRight {
+                justify-content: center;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div style="background-color: #328183;">
+        <nav class="navbar navbar-expand-lg navbar-dark container pt-3 pb-3">
+            <a href="" class="text-white ml-5 pl-3">5/8</a>
+        </nav>
+    </div>
+    <div>
+        <div class="py-5 pb-2" style="background-color: #5db0b1">
+            <p id="" class="ques">Uh oh! It looks like you're out of storage!</p>
+            <p id="desc" class="mainDesc">I wonder what it costs to upgrade?</p>
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <button class="phishBtn" onclick="setCount('PHISHING',6)">
+                    PHISHING </button>
+                <button class="phishBtn" onclick="setCount('LEGITIMATE',6)">
+                    LEGITIMATE </button>
+            </div>
+        </div>
+
+
+
+        <div class="contentContainer">
+            <div class=""
+                style="display: flex; justify-content: space-between; padding-left: 10px; padding-right: 10px;">
+                <div class="" style="display: flex;align-items: center;">
+                    <div class="" style="background-color: #5db0b1;color: #ffffff; border-radius: 100px; height: 50px; width: 50px; text-align: center; display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-top: 10px;
+                    font-size: 22px;">
+                        L
+                    </div>
+                    <div>
+                        <div class="senderContainer">
+                            <span style="color: #000 !important">Enterprise Team</span>&nbsp;
+                            &lt;hr.eteam05@gmail.com&gt;
+                        </div>
+                        <div class="toMe">
+                            to me
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a style="padding: 0px 0px 0px 0px !important;
+                              color: #0008 !important;" class="nav-link" href="#" id="navbarDropdown" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span style="
+                                padding: 0px 3px 0px 3px; margin-left: 5px"><i class="fa fa-caret-down"
+                                                aria-hidden="true"></i> </span>
+                                    </a>
+                                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdown">
+                                        <p> from: &lt;luke.json8000@gmail.com&gt;</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p id="quizTime" class=""></p>
+            </div>
+            <div class="d-flex p-3">
+                <div class="contentOuterLayer">
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <footer class="page-footer font-small blue pt-3 mt-auto border-top">
+        <div class="container text-center text-md-left py-2">
+            <div class="row">
+                <div class="footerLeft">
+                    <div class="footer-copyright text-center py-2" style="color: darkgray;">© 2022 Copyright:
+                        <a href="/" class="fotterLink"> whogotphish.com</a>
+                    </div>
+                </div>
+                <!-- <hr class="clearfix w-100 d-md-none pb-3"> -->
+                <div class=" footerRight">
+                    <a class="fotterLink pl-2">Privacy</a>
+                    <a class="fotterLink pl-2">Terms</a>
+                    <a class="fotterLink pl-2">Feedback</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        var answer="LEGITIMATE";
+    </script>
+    <script src="/js/dist/vendor.min.js"></script>
+    <script src="/js/dist/app/gophish.min.js"></script>
+    <script src="/js/dist/app/quiz.min.js"></script>
+    <script src="/js/quiz/quiz.js"></script>
+</body>
+
+</html>

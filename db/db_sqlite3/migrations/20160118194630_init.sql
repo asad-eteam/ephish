@@ -34,6 +34,7 @@ IF NOT EXISTS "results"
 (255),"first_name" varchar
 (255),"last_name" varchar
 (255),"status" varchar
+(255),"group_name" varchar
 (255) NOT NULL ,"ip" varchar
 (255),"latitude" real,"longitude" real );
 CREATE TABLE
@@ -67,9 +68,24 @@ IF NOT EXISTS "attachments"
 (255),"type" varchar
 (255),"name" varchar
 (255) );
+CREATE TABLE
+IF NOT EXISTS "contacts"
+("id" integer primary key autoincrement,"user_id" bigint,"campaign_id" bigint,"message" varchar
+(255) );
+CREATE TABLE
+IF NOT EXISTS "certificates"
+("id" integer primary key autoincrement,"rid"  varchar (255) NOT NULL UNIQUE,"campaign_id" bigint, "first_name" varchar
+(255),"last_name" varchar
+(255),"email" varchar
+(255),"position" varchar
+(255), "created_date" datetime,"updated_date" datetime);
+CREATE TABLE
+IF NOT EXISTS "questions"
+("id" integer primary key autoincrement,"user_id" bigint, "question" varchar, "description" varchar,"html" varchar, "is_phishing" BOOLEAN, "created_date" datetime,"updated_date" datetime );
 
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
+DROP TABLE "contacts";
 DROP TABLE "attachments";
 DROP TABLE "campaigns";
 DROP TABLE "events";
@@ -81,3 +97,5 @@ DROP TABLE "smtp";
 DROP TABLE "targets";
 DROP TABLE "templates";
 DROP TABLE "users";
+DROP TABLE "certificates";
+DROP TABLE "questions";

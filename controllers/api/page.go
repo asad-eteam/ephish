@@ -24,6 +24,7 @@ func (as *Server) Pages(w http.ResponseWriter, r *http.Request) {
 		JSONResponse(w, ps, http.StatusOK)
 	//POST: Create a new page and return it as JSON
 	case r.Method == "POST":
+
 		p := models.Page{}
 		// Put the request into a page
 		err := json.NewDecoder(r.Body).Decode(&p)

@@ -93,6 +93,7 @@ var ErrGroupNameNotSpecified = errors.New("Group name not specified")
 
 // ErrNoTargetsSpecified is thrown when no targets are specified by the user
 var ErrNoTargetsSpecified = errors.New("No targets specified")
+var ErrTargetsLimitExceeded = errors.New("Max limit exceeded! One group can have up to 100 emails.")
 
 // Validate performs validation on a group given by the user
 func (g *Group) Validate() error {
@@ -101,6 +102,8 @@ func (g *Group) Validate() error {
 		return ErrGroupNameNotSpecified
 	case len(g.Targets) == 0:
 		return ErrNoTargetsSpecified
+	case len(g.Targets) > 100:
+		return ErrTargetsLimitExceeded
 	}
 	return nil
 }
@@ -192,6 +195,8 @@ func GetGroupByName(n string, uid int64) (Group, error) {
 
 // PostGroup creates a new group in the database.
 func PostGroup(g *Group) error {
+	fmt.Println("gggggggggggggggg")
+	fmt.Printf("%+v", len(g.Targets))
 	if err := g.Validate(); err != nil {
 		return err
 	}
@@ -313,6 +318,7 @@ func DeleteGroup(g *Group) error {
 }
 
 func insertTargetIntoGroup(tx *gorm.DB, t Target, gid int64) error {
+
 	if _, err := mail.ParseAddress(t.Email); err != nil {
 		log.WithFields(logrus.Fields{
 			"email": t.Email,

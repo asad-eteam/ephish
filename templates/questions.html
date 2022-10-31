@@ -1,0 +1,194 @@
+{{define "body"}}
+<div class="col-sm-12 col-md-12">
+  <p
+    style="
+      font-size: 26px;
+      font-family: -webkit-pictograph;
+      font-weight: 600;
+      margin-left: -14px;
+    "
+  >
+  Questions
+  </p>
+  <div id="flashes" class="row"></div>
+  <div class="row">
+    <button
+      type="button"
+      class="btn btn-primary"
+      onclick="edit(-1)"
+      data-toggle="modal"
+      data-backdrop="static"
+      data-target="#modal"
+    >
+      <i class="fa fa-plus"></i> New Question
+    </button>
+  </div>
+  &nbsp;
+  <div id="loading">
+    <i class="fa fa-spinner fa-spin fa-4x"></i>
+  </div>
+  <div id="emptyMessage" class="row" style="display: none">
+    <div class="alert alert-info">No Questions created yet. Let's create one!</div>
+  </div>
+  <div
+    class="row"
+    style="
+      background-color: #fff !important;
+      padding: 10px !important;
+      border-radius: 5px !important;
+    "
+  >
+    <table id="pagesTable" class="table" style="display: none">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Created Date</th>
+          <th class="col-md-2 no-sort"></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalLabel"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- New Template Modal -->
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          onclick="dismiss()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="modalLabel">New Question</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" id="modal.flashes"></div>
+        <label class="control-label" for="question">Question</label>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Question"
+            id="question"
+            autofocus
+          />
+        </div>
+        <label class="control-label" for="description">Description</label>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Description"
+            id="description"
+            autofocus
+          />
+        </div>
+      
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active" role="html">
+            <a href="#html" aria-controls="html" role="tab" data-toggle="tab"
+              >HTML</a
+            >
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="html">
+            <textarea id="html_editor"></textarea>
+          </div>
+        </div>
+        <div class="checkbox checkbox-primary">
+          <input id="is_phishing" type="checkbox" />
+          <label for="is_phishing"
+            >Is Phishing</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          data-dismiss="modal"
+          class="btn btn-default"
+          onclick="dismiss()"
+        >
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="modalSubmit">
+          Save Page
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="importSiteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="importSiteModalLabel"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- New Template Modal -->
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="importSiteModalLabel">Import Site</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" id="modal.flashes"></div>
+        <label class="control-label" for="url">URL:</label>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="http://google.com"
+            id="url"
+            autofocus
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="modalSubmit"
+          onclick="importSite()"
+        >
+          Import
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{{end}} {{define "scripts"}}
+<script src="/js/src/vendor/ckeditor/ckeditor.js"></script>
+<script src="/js/src/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/js/dist/app/autocomplete.min.js"></script>
+<script src="/js/dist/app/questions.min.js"></script>
+{{end}}
+ 

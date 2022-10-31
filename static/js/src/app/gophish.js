@@ -277,6 +277,41 @@ var api = {
             return query("/webhooks/" + id + "/validate", "POST", {}, true)
         },
     },
+    // pages contains the endpoints for /pages
+    questions: {
+        // get() - Queries the API for GET /pages        
+        get: function () {
+            console.log("eeeeeeeeeeeeee")
+            return query("/questions/", "GET", {}, false)
+        },
+        // post() - Posts a page to POST /pages
+        post: function (question) {
+            console.log('111111111111',question)
+            return query("/questions/", "POST", question, false)
+        }
+    },
+     // pageId contains the endpoints for /pages/:id
+     questionId: {
+        // get() - Queries the API for GET /pages/:id
+        get: function (id) {
+            return query("/pages/" + id, "GET", {}, false)
+        },
+        // put() - Puts a page to PUT /pages/:id
+        put: function (page) {
+            return query("/pages/" + page.id, "PUT", page, false)
+        },
+        // delete() - Deletes a page at DELETE /pages/:id
+        delete: function (id) {
+            return query("/question/" + id, "DELETE", {}, false)
+        }
+    },
+     // pageId contains the endpoints for /pages/:id
+     quizId: {
+        // get() - Queries the API for GET /pages/:id
+        get: function (q) {
+            return query("/quiz/" + q, "GET", {}, false)
+        },
+    },
     // import handles all of the "import" functions in the api
     import_email: function (req) {
         return query("/import/email", "POST", req, false)
