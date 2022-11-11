@@ -630,9 +630,6 @@ func SubmitUserCampaign(c *Campaign, uid int64) error {
 	if e != nil {
 		return e
 	}
-	fmt.Println("************")
-	// fmt.Print("ccccccccccccc", createPage)
-	// fmt.Printf("%+v", createPage)
 	// Fill in the details
 	c.UserId = uid
 	c.Username = u.Username

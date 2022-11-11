@@ -8,10 +8,12 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/NYTimes/gziphandler"
+	"github.com/gophish/gomail"
 	"github.com/gophish/gophish/auth"
 	"github.com/gophish/gophish/config"
 	ctx "github.com/gophish/gophish/context"
@@ -27,7 +29,16 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/jordan-wright/unindexed"
+	"github.com/jung-kurt/gofpdf"
+	"github.com/jung-kurt/gofpdf/contrib/httpimg"
 )
+
+type mail struct {
+	Sender  string
+	To      []string
+	Subject string
+	Body    string
+}
 
 // AdminServerOption is a functional option that is used to configure the
 // admin server
@@ -146,7 +157,8 @@ func (as *AdminServer) registerRoutes() {
 	router.HandleFunc("/report", as.Report)
 	router.HandleFunc("/test", as.Test)
 	router.HandleFunc("/quiz", as.quiz)
-	router.HandleFunc("/quiz/certificate", mid.Use(as.Certificate))
+	router.HandleFunc("/quiz/certificate", mid.Use(as.CreateCertificate))
+	router.HandleFunc("/certificate", mid.Use(as.Certificate))
 	// Create the API routes
 	api := api.NewServer(
 		api.WithWorker(as.worker),
@@ -276,16 +288,72 @@ func (as *AdminServer) quiz(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 
 }
-func (as *AdminServer) Certificate(w http.ResponseWriter, r *http.Request) {
+func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request) {
 
 	rid := r.URL.Query().Get("rid")
 
 	certificate, e := models.PostCertificate(rid)
+
 	if e != nil {
 		fmt.Println(e)
 	}
-	t, _ := template.ParseFiles("./templates/quiz/certificate.html")
-	t.Execute(w, certificate)
+	pdf := gofpdf.New("p", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 16)
+	url := "http://127.0.0.1:3333/static/images/certificate.jpg"
+	httpimg.Register(pdf, url, "")
+	pdf.Image(url, 8, 10, 195, 0, false, "", 0, "")
+
+	htmlStr :=
+		`<br><br><br><br><br><br><br><br><br><center><b><i>Certificate of Completion <br>Congratulation</i></b></center>` +
+			`<center><i>` + certificate.FirstName + ` ` + certificate.LastName + `</i></center>` +
+			`<center><i>` + certificate.Position + `</i></center><br>` +
+			`<center><i>You have successfully completed following course</i></center>` +
+			`<center><i>Phishing Awareness Challenge</i></center><br><br>` +
+			`<center><i>Company Name: ` + certificate.CompanyName + `</i></center>` +
+			`<center><i>Certificate ID: ` + rid + `</i></center>` +
+			`<center><i>Issue Date: ` + certificate.CreatedDate + `</i></center><br><br>`
+
+	html := pdf.HTMLBasicNew()
+	_, lineHt := pdf.GetFontSize()
+	html.Write(lineHt, htmlStr)
+
+	err := pdf.OutputFileAndClose("./static/certificates/" + rid + ".pdf")
+	if err != nil {
+		fmt.Println("eeeeeee", err)
+	}
+	result, e := models.GetResult(rid)
+	sm, se := models.GetSMTPUserId(result.UserId)
+	if se != nil {
+
+	}
+	to := []string{certificate.Email}
+	sender := sm.Username
+	password := sm.Password
+	h := strings.Split(sm.Host, ":")[0]
+	port, err := strconv.Atoi(strings.Split(sm.Host, ":")[1])
+	if err != nil {
+		log.Error(err)
+	}
+	m := gomail.NewMessage()
+	m.SetHeader("From", sender)
+	m.SetHeader("To", to...)
+	m.SetHeader("Subject", "Hello!")
+	m.SetBody("text/html", " Hello "+certificate.FirstName+",<br> Congratulations on completing the <b>&ldquo;Phishing Awareness Certification&rdquo;</b>.<br>Your certificate is attached with this email and also available on this link:"+
+		"  <a download href="+"http://127.0.0.1:3333/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
+	m.Attach("./static/certificates/" + rid + ".pdf")
+	fmt.Println("111111111111111")
+	d := gomail.NewPlainDialer(h, port, sender, password)
+	fmt.Println("222222222222222")
+	// Send the email to Bob, Cora and Dan.
+	if err := d.DialAndSend(m); err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Email sent successfully")
+}
+func (as *AdminServer) Certificate(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Settings handles the changing of settings
@@ -599,4 +667,13 @@ func (as *AdminServer) Questions(w http.ResponseWriter, r *http.Request) {
 	params := newTemplateParams(r)
 	params.Title = "Questions"
 	getTemplate(w, "Questions").ExecuteTemplate(w, "base", params)
+}
+
+func BuildMessageBody(mail mail) string {
+	msg := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
+	msg += fmt.Sprintf("From: %s\r\n", mail.Sender)
+	msg += fmt.Sprintf("To: %s\r\n", strings.Join(mail.To, ";"))
+	msg += fmt.Sprintf("Subject: %s\r\n", mail.Subject)
+	msg += fmt.Sprintf("\r\n%s\r\n", []byte(mail.Body))
+	return msg
 }

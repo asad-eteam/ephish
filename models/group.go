@@ -195,8 +195,6 @@ func GetGroupByName(n string, uid int64) (Group, error) {
 
 // PostGroup creates a new group in the database.
 func PostGroup(g *Group) error {
-	fmt.Println("gggggggggggggggg")
-	fmt.Printf("%+v", len(g.Targets))
 	if err := g.Validate(); err != nil {
 		return err
 	}

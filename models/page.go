@@ -118,8 +118,6 @@ func GetPageByName(n string, uid int64) (Page, error) {
 	if err != nil {
 		log.Error(err)
 	}
-	fmt.Println("$$$$$$$$$$$$", p)
-	fmt.Printf("%+v", p)
 	return p, err
 }
 

@@ -243,3 +243,13 @@ func DeleteSMTP(id int64, uid int64) error {
 	}
 	return err
 }
+
+func GetSMTPUserId(uid int64) (SMTP, error) {
+	s := SMTP{}
+	err := db.Where("user_id=?", uid).Find(&s).Error
+	if err != nil {
+		log.Error(err)
+		return s, err
+	}
+	return s, err
+}
