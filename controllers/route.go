@@ -291,6 +291,13 @@ func (as *AdminServer) quiz(w http.ResponseWriter, r *http.Request) {
 func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request) {
 
 	rid := r.URL.Query().Get("rid")
+	_, e := models.GetResult(rid)
+
+	if e != nil {
+
+		log.Error("Invalid Id :", e)
+		return
+	}
 
 	certificate, e := models.PostCertificate(rid)
 
@@ -351,6 +358,11 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	}
 
 	fmt.Println("Email sent successfully")
+	t, _ := template.ParseFiles("./templates/quiz/CertificateSent.html")
+	Sent := certificate.Email
+	fmt.Println("##############", Sent)
+	t.Execute(w, Sent)
+
 }
 func (as *AdminServer) Certificate(w http.ResponseWriter, r *http.Request) {
 

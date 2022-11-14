@@ -32,6 +32,7 @@ func PostCertificate(rid string) (Certificate, error) {
 	// return c, e
 	r, e := GetResult(rid)
 	if e != nil {
+
 		log.Error("Invalid Id :", e)
 	}
 	c.RId = r.RId
