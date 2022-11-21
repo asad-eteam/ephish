@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -77,6 +78,7 @@ func (as *Server) Users(w http.ResponseWriter, r *http.Request) {
 		return
 	case r.Method == "POST":
 		ur := &userRequest{}
+
 		err := json.NewDecoder(r.Body).Decode(ur)
 		if err != nil {
 			JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusBadRequest)
@@ -109,7 +111,9 @@ func (as *Server) Users(w http.ResponseWriter, r *http.Request) {
 			Role:                   role,
 			RoleID:                 role.ID,
 			PasswordChangeRequired: ur.PasswordChangeRequired,
+			AccountLocked:          ur.AccountLocked,
 		}
+
 		err = models.PutUser(&user)
 		if err != nil {
 			JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusInternalServerError)
@@ -156,7 +160,10 @@ func (as *Server) User(w http.ResponseWriter, r *http.Request) {
 		JSONResponse(w, models.Response{Success: true, Message: "User deleted Successfully!"}, http.StatusOK)
 	case r.Method == "PUT":
 		ur := &userRequest{}
+		fmt.Println("pppppppppppppppp")
+		fmt.Printf("%+v", ur)
 		err = json.NewDecoder(r.Body).Decode(ur)
+
 		if err != nil {
 			log.Errorf("error decoding user request: %v", err)
 			JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusBadRequest)
@@ -169,6 +176,7 @@ func (as *Server) User(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		existingUser.Username = ur.Username
+		existingUser.AccountLocked = ur.AccountLocked
 		// Only users with the ModifySystem permission are able to update a
 		// user's role. This prevents a privilege escalation letting users
 		// upgrade their own account.
@@ -215,6 +223,7 @@ func (as *Server) User(w http.ResponseWriter, r *http.Request) {
 			}
 			existingUser.Hash = hash
 		}
+
 		err = models.PutUser(&existingUser)
 		if err != nil {
 			JSONResponse(w, models.Response{Success: false, Message: err.Error()}, http.StatusInternalServerError)

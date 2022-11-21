@@ -31,7 +31,6 @@ require (
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
-	github.com/cavaliergopher/grab/v3 v3.0.1 // indirect
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/kylelemons/go-gypsy v0.0.0-20160905020020-08cad365cd28 // indirect

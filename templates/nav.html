@@ -1,16 +1,19 @@
 {{define "nav"}}
 <div class="container-fluid" >
     <div class="row">
+        {{if .ModifySystem}}
         <div class="col-sm-3 col-md-2 sidebar" style="background-color:hsl(181deg 35% 53%); ">
-        
+            {{else}}
+        <div class="col-sm-3 col-md-2 sidebar" style="background-color:#0f00ab; ">
+        {{end}}
             <ul class="nav nav-sidebar" style="color:#fff;">
                 <li style="background-color:#fff;color:#000; text-align:center;   
    
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-size: 20px;">
                 <div style="color: #187d97">
-                 <h4>WHOGOTPHISHED</h4>
+                 <img src="../static/images/logo.png" style="max-width: 180px !important;"/>
                 </div>
                 <!-- <div style="color: #187d97">CYBER TRUST</div>
                     <div class="a" style="background-color: #187d97;color:#fff">

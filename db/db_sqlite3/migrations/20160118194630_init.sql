@@ -74,15 +74,12 @@ IF NOT EXISTS "contacts"
 (255) );
 CREATE TABLE
 IF NOT EXISTS "certificates"
-("id" integer primary key autoincrement,"rid"  varchar (255) NOT NULL UNIQUE,"campaign_id" bigint, "first_name" varchar
+("id" integer primary key autoincrement,"r_id"  varchar (255) NOT NULL UNIQUE,"campaign_id" bigint, "first_name" varchar
 (255),"last_name" varchar
-(255),"email" varchar,
+(255),"email" varchar
 (255),"position" varchar
 (255), "company_name" varchar
 (255),"created_date" datetime,"updated_date" datetime);
-CREATE TABLE
-IF NOT EXISTS "questions"
-("id" integer primary key autoincrement,"user_id" bigint, "question" varchar, "description" varchar,"html" varchar, "is_phishing" BOOLEAN, "created_date" datetime,"updated_date" datetime );
 
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
@@ -99,4 +96,3 @@ DROP TABLE "targets";
 DROP TABLE "templates";
 DROP TABLE "users";
 DROP TABLE "certificates";
-DROP TABLE "questions";

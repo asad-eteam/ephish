@@ -14,12 +14,14 @@ const save = (id) => {
         password_change_required: $("#force_password_change_checkbox").prop('checked'),
         account_locked: $("#account_locked_checkbox").prop('checked')
     }
+ 
     // Submit the user
     if (id != -1) {
         // If we're just editing an existing user,
         // we need to PUT /user/:id
         user.id = id
         api.userId.put(user)
+    
             .success((data) => {
                 successFlash("User " + escapeHtml(user.username) + " updated successfully!")
                 load()
@@ -51,11 +53,13 @@ const dismiss = () => {
     $("#confirm_password").val("")
     $("#role").val("")
     $("#force_password_change_checkbox").prop('checked', true)
-    $("#account_locked_checkbox").prop('checked', false)
+    // $("#account_locked_checkbox").prop('checked', false)
     $("#modal\\.flashes").empty()
 }
 
 const edit = (id) => {
+
+   
     $("#modalSubmit").unbind('click').click(() => {
         save(id)
     })

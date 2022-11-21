@@ -307,10 +307,9 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	pdf := gofpdf.New("p", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
-	url := "http://127.0.0.1:3333/static/images/certificate.jpg"
+	url := "https://whogotphished.com/images/certificate.jpg"
 	httpimg.Register(pdf, url, "")
 	pdf.Image(url, 8, 10, 195, 0, false, "", 0, "")
-
 	htmlStr :=
 		`<br><br><br><br><br><br><br><br><br><center><b><i>Certificate of Completion <br>Congratulation</i></b></center>` +
 			`<center><i>` + certificate.FirstName + ` ` + certificate.LastName + `</i></center>` +
@@ -347,7 +346,7 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	m.SetHeader("To", to...)
 	m.SetHeader("Subject", "Hello!")
 	m.SetBody("text/html", " Hello "+certificate.FirstName+",<br> Congratulations on completing the <b>&ldquo;Phishing Awareness Certification&rdquo;</b>.<br>Your certificate is attached with this email and also available on this link:"+
-		"  <a download href="+"http://127.0.0.1:3333/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
+		"  <a download href="+"https://whogotphished.com:3333/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
 	m.Attach("./static/certificates/" + rid + ".pdf")
 	fmt.Println("111111111111111")
 	d := gomail.NewPlainDialer(h, port, sender, password)

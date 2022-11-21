@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/gophish/gophish/auth"
@@ -59,6 +60,8 @@ func GetUserByUsername(username string) (User, error) {
 
 // PutUser updates the given user
 func PutUser(u *User) error {
+	fmt.Println("*****************")
+	fmt.Printf("%+v", u)
 	err := db.Save(u).Error
 	return err
 }
