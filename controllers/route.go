@@ -137,7 +137,7 @@ func (as *AdminServer) registerRoutes() {
 	router := mux.NewRouter()
 	fs := http.FileServer(http.Dir("./static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
-        router.HandleFunc("/", as.Home)
+	router.HandleFunc("/", as.Home)
 	router.HandleFunc("/dashboard", mid.Use(as.Base, mid.RequireLogin))
 	router.HandleFunc("/login", mid.Use(as.Login, as.limiter.Limit))
 	router.HandleFunc("/sso", mid.Use(as.Sso, as.limiter.Limit))
@@ -158,8 +158,8 @@ func (as *AdminServer) registerRoutes() {
 	router.HandleFunc("/report", as.Report)
 	router.HandleFunc("/test", as.Test)
 	router.HandleFunc("/quiz", as.quiz)
+	router.HandleFunc("/certificate", as.CreateCertificate)
 
-	
 	// Create the API routes
 	api := api.NewServer(
 		api.WithWorker(as.worker),
@@ -270,6 +270,7 @@ func (as *AdminServer) Report(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./templates/report.html")
 }
 func (as *AdminServer) Test(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("%+v", r)
 	t, _ := template.ParseFiles("./templates/test/index.html")
 	t.Execute(w, nil)
 }
@@ -308,7 +309,10 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	pdf := gofpdf.New("p", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
-	url := "https://whogotphished.com/images/certificate.jpg"
+	if as.config.UseTLS {
+
+	}
+	url := "https://" + as.config.ListenURL + "/static/images/certificate.jpg"
 	httpimg.Register(pdf, url, "")
 	pdf.Image(url, 8, 10, 195, 0, false, "", 0, "")
 	htmlStr :=
@@ -347,7 +351,7 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	m.SetHeader("To", to...)
 	m.SetHeader("Subject", "Hello!")
 	m.SetBody("text/html", " Hello "+certificate.FirstName+",<br> Congratulations on completing the <b>&ldquo;Phishing Awareness Certification&rdquo;</b>.<br>Your certificate is attached with this email and also available on this link:"+
-		"  <a download href="+"https://whogotphished.com:3333/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
+		"  <a download href="+"https://"+as.config.ListenURL+"/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
 	m.Attach("./static/certificates/" + rid + ".pdf")
 	fmt.Println("111111111111111")
 	d := gomail.NewPlainDialer(h, port, sender, password)
@@ -360,12 +364,11 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	fmt.Println("Email sent successfully")
 	t, _ := template.ParseFiles("./templates/quiz/CertificateSent.html")
 	Sent := certificate.Email
-	fmt.Println("##############", Sent)
 	t.Execute(w, Sent)
 
 }
 func (as *AdminServer) Home(w http.ResponseWriter, r *http.Request) {
-            t, _ := template.ParseFiles("./templates/website/home.html")
+	t, _ := template.ParseFiles("./templates/website/home.html")
 	t.Execute(w, nil)
 }
 

@@ -9,10 +9,10 @@ function setCount(d,n) {
         ls.setItem('correct',parseInt(ls.getItem('correct'))+1)
     }
     if(parseInt(ls.getItem('question'))===8){
-        window.location.href='https://whogotphished.com:3333/quiz/certificate?rid='+ls.getItem('rid')
+        window.location.href='/quiz/certificate?rid='+ls.getItem('rid')
         
     }else{
-        window.location.href='https://whogotphished.com:3333/quiz?id='+ls.getItem('question')+"&rid="+ls.getItem('rid')
+        window.location.href='/quiz?id='+ls.getItem('question')+"&rid="+ls.getItem('rid')
     }
 }
 
