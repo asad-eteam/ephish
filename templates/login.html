@@ -12,7 +12,7 @@
     />
     <link rel="shortcut icon" href="/images/favicon.ico" />
 
-    <title>Gophish - {{ .Title }}</title>
+    <title>Who Got Phished - {{ .Title }}</title>
 
     <link href="/css/dist/gophish.css" rel="stylesheet" />
     <link
@@ -87,7 +87,7 @@
       */}} {{/*
     </div>
     */}}
-    <div class="container">
+    <div class="container" style="padding-top:20vh">
       <form class="form-signin" action="" method="POST">
         {{/* <img id="logo" src="/images/logo_purple.png" /> */}}
         <div style="text-align: center">
@@ -112,7 +112,7 @@
             ALLI <i class="fa fa-lock"></i> NCE
           </p>
         </div> -->
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h4 class="form-signin-heading" style="margin-top:50px">Please sign in</h4>
         {{template "flashes" .Flashes}}
         <input
           type="text"

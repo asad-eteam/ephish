@@ -606,7 +606,7 @@ func CompleteCampaign(id int64, uid int64) error {
 }
 
 func SubmitUserCampaign(c *Campaign, uid int64) error {
-	c.URL = "http://whogotphished.com:3000"
+	c.URL = "https://whogotphished.com:3000"
 	p := Page{}
 	t := Template{}
 

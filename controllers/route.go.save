@@ -137,7 +137,7 @@ func (as *AdminServer) registerRoutes() {
 	router := mux.NewRouter()
 	fs := http.FileServer(http.Dir("./static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
-        router.HandleFunc("/", as.Home)
+        router.HandleFunc("/dashboard", as.Home)
 	router.HandleFunc("/dashboard", mid.Use(as.Base, mid.RequireLogin))
 	router.HandleFunc("/login", mid.Use(as.Login, as.limiter.Limit))
 	router.HandleFunc("/sso", mid.Use(as.Sso, as.limiter.Limit))
@@ -158,8 +158,8 @@ func (as *AdminServer) registerRoutes() {
 	router.HandleFunc("/report", as.Report)
 	router.HandleFunc("/test", as.Test)
 	router.HandleFunc("/quiz", as.quiz)
-
-	
+	router.HandleFunc("/quiz/certificate", mid.Use(as.CreateCertificate))
+	router.HandleFunc("/certificate", mid.Use(as.Certificate))
 	// Create the API routes
 	api := api.NewServer(
 		api.WithWorker(as.worker),
@@ -289,6 +289,9 @@ func (as *AdminServer) quiz(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 
 }
+router.HandleFunc("/dashboard", mid.Use(as.Base, mid.RequireLogin)){
+        
+}
 func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request) {
 
 	rid := r.URL.Query().Get("rid")
@@ -364,9 +367,8 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	t.Execute(w, Sent)
 
 }
-func (as *AdminServer) Home(w http.ResponseWriter, r *http.Request) {
-            t, _ := template.ParseFiles("./templates/website/home.html")
-	t.Execute(w, nil)
+func (as *AdminServer) Certificate(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Settings handles the changing of settings

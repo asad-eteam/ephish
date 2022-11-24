@@ -169,10 +169,7 @@ func (ps *PhishingServer) TrackHandler(w http.ResponseWriter, r *http.Request) {
 
 // ReportHandler tracks emails as they are reported, updating the status for the given Result
 func (ps *PhishingServer) ReportHandler(w http.ResponseWriter, r *http.Request) {
-url:="https://whogotphished.com/report.html"
 
-
-        http.Redirect(w, r, url, http.StatusSeeOther)
 	r, err := setupContext(r)
 	w.Header().Set("Access-Control-Allow-Origin", "*") // To allow Chrome extensions (or other pages) to report a campaign without violating CORS
 	if err != nil {
@@ -205,8 +202,23 @@ url:="https://whogotphished.com/report.html"
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+url:="https://whogotphished.com/report.html"
+var er error
+  switch runtime.GOOS {
+  case "linux":
+    er = exec.Command("xdg-open", url).Start()
+  case "windows":
+    er = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+  case "darwin":
+    er = exec.Command("open", url).Start()
+  default:
+    er = fmt.Errorf("unsupported platform")
+  }
+  if er != nil {
+    fmt.Println(er)
+  }
 }
-
+https://whogotphished.com/report.html
 // PhishHandler handles incoming client connections and registers the associated actions performed
 // (such as clicked link, etc.)
 func (ps *PhishingServer) PhishHandler(w http.ResponseWriter, r *http.Request) {
