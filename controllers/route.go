@@ -312,7 +312,7 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	if as.config.UseTLS {
 
 	}
-	url := "https://" + as.config.ListenURL + "/static/images/certificate.jpg"
+	url := "https://eteamid.com/gophish/certificate.jpg"
 	httpimg.Register(pdf, url, "")
 	pdf.Image(url, 8, 10, 195, 0, false, "", 0, "")
 	htmlStr :=
@@ -351,7 +351,7 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	m.SetHeader("To", to...)
 	m.SetHeader("Subject", "Hello!")
 	m.SetBody("text/html", " Hello "+certificate.FirstName+",<br> Congratulations on completing the <b>&ldquo;Phishing Awareness Certification&rdquo;</b>.<br>Your certificate is attached with this email and also available on this link:"+
-		"  <a download href="+"https://"+as.config.ListenURL+"/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
+		"  <a download href="+"https://whogotphished.com/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
 	m.Attach("./static/certificates/" + rid + ".pdf")
 	fmt.Println("111111111111111")
 	d := gomail.NewPlainDialer(h, port, sender, password)
@@ -476,7 +476,7 @@ func (as *AdminServer) Impersonate(w http.ResponseWriter, r *http.Request) {
 		session.Values["id"] = u.Id
 		session.Save(r, w)
 	}
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/dashboard", http.StatusFound)
 }
 
 // Login handles the authentication flow for a user. If credentials are valid,

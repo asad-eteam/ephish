@@ -14,7 +14,7 @@ const save = (id) => {
         password_change_required: $("#force_password_change_checkbox").prop('checked'),
         account_locked: $("#account_locked_checkbox").prop('checked')
     }
- 
+  
     // Submit the user
     if (id != -1) {
         // If we're just editing an existing user,

@@ -1,0 +1,27 @@
+var q;
+var nextPage=false;
+$('#quizTime').text(new Date().toLocaleTimeString([], { hour: '2-digit', minute: "2-digit", hour12: true }))
+
+function setCount(d,n) {
+  
+    let ls=window.localStorage;
+    if(ls.getItem('question')<8){
+       ls.setItem('question',parseInt(ls.getItem('question'))+1) 
+    }
+    
+    if(d===answer){
+        ls.setItem('correct',parseInt(ls.getItem('correct'))+1)
+    }
+    swal({
+  title: "Good job!",
+  text: "You clicked the button!",
+  icon: "success",
+  button: "Aww yiss!",
+})
+}
+
+if(parseInt(ls.getItem('question'))===8){
+                window.location.href='/certificate?rid='+ls.getItem('rid')
+
+            }else{
+                window.location.href='/quiz?id='+ls.getItem('question')+"&rid="+ls.getItem('rid')
