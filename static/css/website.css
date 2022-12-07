@@ -1,0 +1,65 @@
+body{
+    font-family: 'Lato', sans-serif;
+    background-color: #f2f2f2;
+}
+.nabarLogo{
+    max-height: 40px;
+}
+.platformImg {
+    width: 200px;
+    height: 178px;
+    align-self: center;
+    margin: 18px;
+}
+section {
+    padding: 70px 0px 70px 0px;
+}
+.contentHeading {
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+}
+.featureHeading{
+    font-size: 24px !important;
+    font-weight: 600;
+}
+.featureText{
+    font-size: 16px;
+    padding-left: 18px;
+}
+p {
+    font-size: 20px;
+}
+.contactUsBtn{
+    background-color: #5db0b1;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 50px 8px 50px;
+    font-size: 22px;
+    float: right;
+}
+.contactUsBtn:hover{
+    background-color: #448485;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 50px 8px 50px;
+    font-size: 22px;
+}
+.customShadow:hover{
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+}
+label {
+    font-size: 19px;
+    font-weight: 600;
+}
+.mainHeader{
+    font-size: 60px;
+    font-weight: 700;
+    text-align: center;
+}
+.mainHeaderText {
+    font-size: 33px;
+    text-align: center;
+}
