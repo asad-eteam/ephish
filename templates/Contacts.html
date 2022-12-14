@@ -1,38 +1,122 @@
 {{define "body"}}
-<div class="col-sm-12 col-md-12">
+<div class="col-sm-12  col-md-12  main"style="background-color: #f3f3f3">
+    <div class="conatianer-fluid" style="padding:15px;">
     <div class="row">
-        <p
-    class=""
-    style="font-size: 26px; font-family: -webkit-pictograph; font-weight: 600"
-  >
-            {{.Title}}
-</p>
+        <p style="font-size: 26px; font-family: -webkit-pictograph; font-weight: 600">
+            Contacts
+        </p>
     </div>
-    <div id="flashes" class="row">
-        {{template "flashes" .Flashes}}
     </div>
-    <!-- <div id="loading">
-        <i class="fa fa-spinner fa-spin fa-4x"></i>
-    </div> -->
-    <div class="row" style="background-color: #fff;
-    padding: 10px;
+    <div class="conatianer-fluid" style="background-color:#fff;padding: 30px;
+    background-color: #fff;
     border-radius: 5px;">
-        <table id="userTable" class="table" style="display:block;">
-            <thead>
-                <tr>
-                    <th>User Name</th>
-                    <th>Campaign</th>
-                    <th>Message</th>
-                    <th class="col-md-2 no-sort"></th>
-                </tr>
-            </thead> 
-            <tbody id="contacts" class="container">
-                
-            </tbody>
-        </table>
-    </div>
+   <div class="row">
+    <table id="contactsTable" class="table table-striped" style="background-color:#fff" style="display:none;">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Organization</th>
+                <th>Created Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody style="color:#2a2a2ac7">
+        </tbody>
+    </table>
 </div>
 
+    </div>
+</div>
+<div
+  class="modal fade modal-md"
+  id="messageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="importSiteModalLabel"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- New Template Modal -->
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="messageModalLabel">Message Detail.</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <b>First Name</b>
+                <input class="form-control" type="text" id="first_name" disabled>
+            </div>
+            <div class="col-sm-4">
+                <b>Last Name</b>
+                <input class="form-control" type="text" id="last_name" disabled>
+            </div>
+            <div class="col-sm-4">
+                <b>Organization</b>
+                <input class="form-control" type="text" id="organization_name" disabled>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <b>Email</b>
+                <input class="form-control" type="text" id="email" disabled>
+            </div>
+            <div class="col-sm-4">
+                <b>Phone Number</b>
+                <input class="form-control" type="text" id="phone_number" disabled>
+            </div>
+            <div class="col-sm-4">
+                <b>Type </b>
+                <input class="form-control" type="text" id="message_type" disabled>
+                
+            </div>
+            <div class="col-sm-6">
+                <b>Created Date </b><br>
+                <input  class="form-control" type="text" id="created_date" disabled>
+                
+            </div>
+            <div class="col-sm-12">
+                <b>Message</b><br>
+
+                <textarea class="form-control"  id="message" style="width: 100%; resize: none;" disabled>
+
+                </textarea>
+                
+            </div>
+
+        </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 {{end}} {{define "scripts"}}
-<script src="/js/dist/app/contacts.js"></script>
+<script src="/js/dist/app/contacts.min.js"></script>
 {{end}}
+
+
+
+
+
+
+
+
+
+
+
+

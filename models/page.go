@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 
@@ -172,8 +171,6 @@ func GetPageById(id int64) (Page, error) {
 	return p, err
 }
 func PostUserPage(pageName string, html string, userId int64, pageUrl string, CaptureCredentials bool, CapturePasswords bool) (Page, error) {
-	fmt.Println("1111111111", pageName)
-	fmt.Println("2222222222", userId)
 	p := Page{}
 	p.Name = pageName
 	p.UserId = userId

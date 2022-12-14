@@ -91,11 +91,13 @@ func (as *Server) registerRoutes() {
 	router.HandleFunc("/questions/", as.Questions)
 	router.HandleFunc("/question/{id:[0-9]+}", as.Question)
 	router.HandleFunc("/quiz/{id:[0-9]+}", as.Quiz)
+	// router.HandleFunc("/messages/", Messages)
 	// Mobile api's
 	router.HandleFunc("/login", as.Login)
 	router.HandleFunc("/mobileCampaigns", as.mobileCampaigns)
 	router.HandleFunc("/mobileCampaigns/{id:[0-9]+}", as.mobileCampaignResults)
 	router.HandleFunc("/contacts", as.contact)
+	router.HandleFunc("/contact/{id:[0-9]+}", as.contact)
 
 	as.handler = router
 }

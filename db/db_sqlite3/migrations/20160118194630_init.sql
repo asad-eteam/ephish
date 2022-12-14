@@ -80,6 +80,18 @@ IF NOT EXISTS "certificates"
 (255),"position" varchar
 (255), "company_name" varchar
 (255),"created_date" datetime,"updated_date" datetime);
+CREATE TABLE IF NOT EXISTS "messages" (
+    "id" integer primary key autoincrement,
+    "message_type" varchar(50) NOT NULL ,
+    "first_name" varchar(255) NOT NULL ,
+    "last_name" varchar(255) NOT NULL ,
+    "organization_name" varchar(255) NOT NULL , 
+    "phone_number" varchar(50) NOT NULL ,
+    "email" varchar(255),
+    "message" varchar(255) NOT NULL ,
+    "created_date" datetime
+);
+
 
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
@@ -96,3 +108,4 @@ DROP TABLE "targets";
 DROP TABLE "templates";
 DROP TABLE "users";
 DROP TABLE "certificates";
+DROP TABLE "messages";

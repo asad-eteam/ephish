@@ -24,6 +24,7 @@ import (
 	"github.com/gophish/gophish/models"
 	"github.com/gophish/gophish/util"
 	"github.com/gophish/gophish/worker"
+
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -153,12 +154,13 @@ func (as *AdminServer) registerRoutes() {
 	router.HandleFunc("/users", mid.Use(as.UserManagement, mid.RequirePermission(models.PermissionModifySystem), mid.RequireLogin))
 	router.HandleFunc("/webhooks", mid.Use(as.Webhooks, mid.RequirePermission(models.PermissionModifySystem), mid.RequireLogin))
 	router.HandleFunc("/impersonate", mid.Use(as.Impersonate, mid.RequirePermission(models.PermissionModifySystem), mid.RequireLogin))
-	router.HandleFunc("/contacts", mid.Use(as.Contacts, mid.RequireLogin))
+	router.HandleFunc("/contactus", mid.Use(as.Contacts, mid.RequireLogin))
 	router.HandleFunc("/questions", mid.Use(as.Questions, mid.RequireLogin))
 	router.HandleFunc("/report", as.Report)
 	router.HandleFunc("/test", as.Test)
 	router.HandleFunc("/quiz", as.quiz)
 	router.HandleFunc("/certificate", as.CreateCertificate)
+	router.HandleFunc("/message", as.Message).Methods("POST")
 
 	// Create the API routes
 	api := api.NewServer(
@@ -290,6 +292,25 @@ func (as *AdminServer) quiz(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 
 }
+func (as *AdminServer) Message(w http.ResponseWriter, r *http.Request) {
+	u, e := models.GetUser(1)
+	if e != nil {
+
+	}
+	csrf.Protect(
+		[]byte(u.ApiKey),
+		csrf.HttpOnly(false),
+		csrf.Secure(false),
+	)
+	csrf.Token(r)
+	// params := struct {
+	// 	User    models.User
+	// 	Title   string
+	// 	Flashes []interface{}
+	// 	Token   string
+	// }{Title: "Login", Token: csrf.Token(r)}
+	fmt.Println("*************&&&&&&&&&&&&&&&&&############")
+}
 func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request) {
 
 	rid := r.URL.Query().Get("rid")
@@ -368,8 +389,50 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 
 }
 func (as *AdminServer) Home(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("./templates/website/home.html")
-	t.Execute(w, nil)
+
+	// t, _ := template.ParseFiles("./templates/website/home.html")
+	// t.Execute(w, params)
+
+	params := struct {
+		Title    string
+		Flashes  []interface{}
+		Token    string
+		Messages string
+	}{Title: "Guest", Messages: "", Token: csrf.Token(r)}
+	session := ctx.Get(r, "session").(*sessions.Session)
+
+	switch {
+	case r.Method == "GET":
+		params.Flashes = session.Flashes()
+		session.Save(r, w)
+		t, _ := template.ParseFiles("./templates/website/home.html")
+		t.Execute(w, params)
+	case r.Method == "POST":
+		m := models.Message{}
+		m.MessageType = r.FormValue("type")
+		m.FirstName = r.FormValue("firstname")
+		m.LastName = r.FormValue("lastname")
+		m.OrganizationName = r.FormValue("organizationname")
+		m.PhoneNumber = r.FormValue("phonenumber")
+		m.Email = r.FormValue("email")
+		m.Message = r.FormValue("message")
+		m.CreatedDate = time.Now()
+
+		data := models.PostMessage(&m)
+
+		if data != nil {
+			t, _ := template.ParseFiles("./templates/website/home.html")
+			params.Messages = "error"
+			t.Execute(w, params)
+		}
+		t, e := template.ParseFiles("./templates/website/home.html")
+		if e != nil {
+
+		}
+		params.Messages = "success"
+		t.Execute(w, params)
+
+	}
 }
 
 // Settings handles the changing of settings
@@ -422,7 +485,7 @@ func (as *AdminServer) UserManagement(w http.ResponseWriter, r *http.Request) {
 }
 
 func (as *AdminServer) nextOrIndex(w http.ResponseWriter, r *http.Request) {
-	next := "/"
+	next := "/dashboard"
 	url, err := url.Parse(r.FormValue("next"))
 	if err == nil {
 		path := url.Path
