@@ -164,6 +164,8 @@
                 <button type="button" id="launchButton" class="btn btn-primary" onclick="launch()">
                     <i class="fa fa-rocket"></i> Launch Campaign</button>
                 {{else}}
+                <button type="button" id="launchButton" class="btn btn-primary" data-toggle="modal" data-target="#sendTestCampaignModal" >
+                        <i class="fa fa-rocket"></i> Test Campaign</button>
                 <button type="button" id="launchButton" class="btn btn-primary" onclick="schedule_campaign()">
                         <i class="fa fa-rocket"></i> Scheduale Campaign</button>
                 {{end}}

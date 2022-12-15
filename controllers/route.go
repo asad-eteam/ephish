@@ -372,7 +372,7 @@ func (as *AdminServer) CreateCertificate(w http.ResponseWriter, r *http.Request)
 	m.SetHeader("To", to...)
 	m.SetHeader("Subject", "Hello!")
 	m.SetBody("text/html", " Hello "+certificate.FirstName+",<br> Congratulations on completing the <b>&ldquo;Phishing Awareness Certification&rdquo;</b>.<br>Your certificate is attached with this email and also available on this link:"+
-		"  <a download href="+"https://whogotphished.com/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='http://whogotphished.com'>WhoGotPhished.com</a> ")
+		"  <a download href="+"https://whogotphished.com/static/certificates/"+rid+".pdf"+">Click Here</a><br><br><br>Thank you!<br><br>From:<br> <a href='https://whogotphished.com'>WhoGotPhished.com</a> ")
 	m.Attach("./static/certificates/" + rid + ".pdf")
 	fmt.Println("111111111111111")
 	d := gomail.NewPlainDialer(h, port, sender, password)

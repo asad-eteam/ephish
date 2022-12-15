@@ -6,13 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Gophish - Phishing Toolkit" />
-    <meta
-      name="author"
-      content="Jordan Wright (http://github.com/jordan-wright)"
-    />
     <link rel="shortcut icon" href="/images/favicon.ico" />
 
-    <title>{{ .Title }} - Gophish</title>
+    <title>{{ .Title }} - WhoGotPhished</title>
 
     <link href="/css/dist/gophish.css" rel="stylesheet" type="text/css" />
     <link
@@ -58,14 +54,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          {{/* <img class="navbar-logo" src="/images/logo_inv_small.png" /> */}}
           <a class="navbar-brand" href="/" style="font-size:10px;text-align: center;">
-          {{/* CYBER TRUST</br><span>ALLI <i class="fa fa-lock"></i> NCE</span> */}}
-          {{/* <div style="color: #187d97">CYBER TRUST</div> */}}
-            {{/* <div class="a" style="background-color: #187d97"> */}}
-              {{/* ALLI <i class="fa fa-lock"></i> NCE */}}
-            {{/* </div> */}}
-          {{/* </a> */}}
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -79,7 +68,7 @@
         
               {{if .User}}
               <div class="btn-group" id="navbar-dropdown">
-                <a class="btn btn-primary" href="/settings"
+                <a class="btn btn-primary" href="/dashboard"
                   ><i class="fa fa-user"></i> {{.User.Username}}</a>
                 <a class="btn btn-primary dropdown-toggle" href="/logout">
                   <i class="fa fa-sign-out"></i>
