@@ -161,6 +161,7 @@ func (as *AdminServer) registerRoutes() {
 	router.HandleFunc("/quiz", as.quiz)
 	router.HandleFunc("/certificate", as.CreateCertificate)
 	router.HandleFunc("/message", as.Message).Methods("POST")
+	router.HandleFunc("/viewpage/{id:[0-9]+}", mid.Use(ViewPage))
 
 	// Create the API routes
 	api := api.NewServer(
@@ -747,7 +748,21 @@ func (as *AdminServer) Questions(w http.ResponseWriter, r *http.Request) {
 	params.Title = "Questions"
 	getTemplate(w, "Questions").ExecuteTemplate(w, "base", params)
 }
+func ViewPage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("**************", r.URL)
+	id := r.URL.String()
+	idp := strings.Split(id, "/")
+	i := idp[2]
+	n, _ := strconv.ParseInt(i, 10, 64)
 
+	p, _ := models.GetPageById(n)
+	warning := "<script> $('a').click(function(e){e.preventDefault();alert('This is demo page');  });</script></body>"
+	h := strings.ReplaceAll(p.HTML, "</body>", warning)
+	template.New("webpage").Parse(h)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprint(w, h)
+	return
+}
 func BuildMessageBody(mail mail) string {
 	msg := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
 	msg += fmt.Sprintf("From: %s\r\n", mail.Sender)

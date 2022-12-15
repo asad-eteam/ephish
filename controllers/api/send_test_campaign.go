@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/smtp"
+	"strconv"
 	"strings"
 
 	ctx "github.com/gophish/gophish/context"
@@ -42,6 +43,7 @@ func (as *Server) SendTestCampaign(w http.ResponseWriter, r *http.Request) {
 	if e != nil {
 		return
 	}
+	tamplate.HTML = strings.ReplaceAll(tamplate.HTML, "{{.URL}}", "https://127.0.0.1/viewpage/"+strconv.Itoa(int(tc.PageId)))
 	tc.Template = tamplate
 	//Get landing page by given id
 	landingPage, e := models.GetPageById(tc.PageId)
@@ -49,6 +51,7 @@ func (as *Server) SendTestCampaign(w http.ResponseWriter, r *http.Request) {
 	m := tc.Template.HTML
 	m = strings.ReplaceAll(m, "{{.FirstName}}", tc.FirstName)
 	m = strings.ReplaceAll(m, "{{.LastName}}", tc.LastName)
+	m = strings.ReplaceAll(m, "{{.Email}}", tc.Email)
 	sendCamp(tc.SMTP.Username, tc.Email, tc.SMTP.Username, tc.SMTP.Password, tc.SMTP.FromAddress, tc.SMTP.Host, m, tc.Template.Subject)
 	JSONResponse(w, "Test Campaign sent succesfully!", http.StatusCreated)
 	return

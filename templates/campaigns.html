@@ -148,11 +148,15 @@
                         <select class="form-control" placeholder="Sending Profile" id="profile">
                         <option></option>
                         </select>
+                        {{if .ModifySystem}}
                         <span class="input-group-btn">
+                            
                             <button type="button" data-toggle="modal" data-backdrop="static" data-target="#sendTestEmailModal"
                                 class="btn btn-primary button">
                                 <i class="fa fa-envelope"></i> Send Test Email</button>
-                        </span>
+                               
+                        </span> 
+                    {{end}}
                     </div>
                     <label class="control-label" for="users">Groups:</label>
                     <select class="form-control" id="users" multiple="multiple"></select>

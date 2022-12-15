@@ -790,7 +790,6 @@ func SubmitUserCampaign(c *Campaign, uid int64) error {
 	return tx.Commit().Error
 }
 func SubmitAdminCampaign(c *Campaign, uid int64) error {
-	fmt.Println("SubmitAdminCampaign : qqqqqqqqq", uid)
 	err := c.Validate()
 	if err != nil {
 		return err
