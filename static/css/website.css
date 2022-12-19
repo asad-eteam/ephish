@@ -4,6 +4,28 @@ body{
     background-color: #f2f2f2;
     overflow-x: hidden;
 }
+#customHeader ul li {
+    display: inline-flex;
+    color: #fff8;
+    align-self: center;
+    line-height: 0px;
+    padding: 0px;
+    font-size: 22px;
+    align-items: center;
+}
+#customHeader ul li a{
+    color: #fff !important;
+}
+
+#customHeader ul li:not(:last-child):after {
+  content: "|";
+  }
+li+li { 
+    border-left: 1px solid #fff7 
+}
+a.nav-link.text-white {
+    font-size: 20px;
+}
 .nabarLogo {
     max-height: 56px;
     width: 150px;

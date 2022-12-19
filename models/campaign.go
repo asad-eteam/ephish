@@ -706,6 +706,10 @@ func SubmitUserCampaign(c *Campaign, uid int64) error {
 	}
 	c.SMTP = s
 	c.SMTPId = s.Id
+	err = c.Validate()
+	if err != nil {
+		return err
+	}
 	// Insert into the DB
 	err = db.Save(c).Error
 	if err != nil {
