@@ -48,11 +48,11 @@ func PostMessage(m *Message) error {
 	cm.SetHeader("Subject", "Hello!")
 	cm.SetBody("text/html", " Hello ,<br> "+m.FirstName+" "+m.LastName+" contacted for <b>"+m.MessageType+"</b>"+"<br/><br/>"+
 		"<b>Details</b><br>"+m.FirstName+" "+m.LastName+"<br>"+m.Email+"<br>"+m.PhoneNumber)
-	d := gomail.NewPlainDialer("sgp17.siteground.asia", 587, "gophish@eteamid.com", "4k5643g*h)l#")
-	// Send the email to Bob, Cora and Dan.
-	if err := d.DialAndSend(cm); err != nil {
-		panic(err)
-	}
+	// d := gomail.NewPlainDialer("sgp17.siteground.asia", 587, "gophish@eteamid.com", "4k5643g*h)l#")
+	// // Send the email to Bob, Cora and Dan.
+	// if err := d.DialAndSend(cm); err != nil {
+	// 	panic(err)
+	// }
 
 	return err
 }

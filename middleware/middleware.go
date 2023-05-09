@@ -119,7 +119,7 @@ func RequireLogin(handler http.Handler) http.HandlerFunc {
 		session := ctx.Get(r, "session").(*sessions.Session)
 		c := &http.Cookie{}
 		if session.Options.MaxAge > time.Now().Second() {
-			t := time.Duration(45*60) * time.Second
+			t := time.Duration(20) * time.Second
 			c.Expires = time.Now().Add(t)
 
 		}

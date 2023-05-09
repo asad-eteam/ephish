@@ -14,7 +14,7 @@ func init() {
 	gob.Register(&models.Flash{})
 	Store.Options.HttpOnly = true
 	// This sets the maxAge to 5 days for all cookies
-	Store.MaxAge(86400 * 5)
+	Store.MaxAge(2700)
 }
 
 // Store contains the session information for the request

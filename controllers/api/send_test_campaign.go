@@ -49,18 +49,20 @@ func (as *Server) SendTestCampaign(w http.ResponseWriter, r *http.Request) {
         t=strings.ReplaceAll(t, "{{.LastName}}", tc.LastName)
         t=strings.ReplaceAll(t, "{{.Email}}", tc.Email)
         t=strings.ReplaceAll(t, "{{.Position}}", tc.Position)
-    
+         
         tc.Template.Subject = t
-	tamplate.HTML = strings.ReplaceAll(tamplate.HTML, "{{.URL}}", "https://whogotphished.com/viewpage/"+strconv.Itoa(int(tc.PageId)))
-	
+	emailTemplateHtml:=strings.ReplaceAll(tamplate.HTML, "{{.URL}}", "https://whogotphished.com/viewpage/"+strconv.Itoa(int(tc.PageId)))
+        tc.Template.HTML=emailTemplateHtml
+        fmt.Println("**************", tamplate.HTML)
 	//Get landing page by given id
 	landingPage, e := models.GetPageById(tc.PageId)
 	tc.Page = landingPage
-	m := tc.Template.HTML
+	m := emailTemplateHtml
 	m = strings.ReplaceAll(m, "{{.FirstName}}", tc.FirstName)
 	m = strings.ReplaceAll(m, "{{.LastName}}", tc.LastName)
 	m = strings.ReplaceAll(m, "{{.Email}}", tc.Email)
 	m = strings.ReplaceAll(m, "{{.Position}}", tc.Position)
+        fmt.Println("**************", m)   
 	sendCamp(tc.SMTP.Username, tc.Email, tc.SMTP.Username, tc.SMTP.Password, tc.SMTP.FromAddress, tc.SMTP.Host, m, tc.Template.Subject)
 	JSONResponse(w, "Test Campaign sent succesfully!", http.StatusCreated)
 	return

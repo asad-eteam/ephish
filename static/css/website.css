@@ -17,11 +17,21 @@ body{
     color: #fff !important;
 }
 
-#customHeader ul li:not(:last-child):after {
-  content: "|";
-  }
-li+li { 
-    border-left: 1px solid #fff7 
+.customHeader ul li {
+
+    color: #fff8;
+    align-self: center;
+    line-height: 0px;
+    padding: 0px;
+    font-size: 22px;
+    display: inline-flex !important;
+    align-items: baseline !important;
+}
+.customHeader ul li:not(:first-child):before {
+    content: ' |';
+    color: #fff8;
+    vertical-align: -webkit-baseline-middle;
+    font-size: 22px;
 }
 a.nav-link.text-white {
     font-size: 20px;

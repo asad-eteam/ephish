@@ -24,7 +24,6 @@ import (
 	"github.com/gophish/gophish/models"
 	"github.com/gophish/gophish/util"
 	"github.com/gophish/gophish/worker"
-
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -32,6 +31,7 @@ import (
 	"github.com/jordan-wright/unindexed"
 	"github.com/jung-kurt/gofpdf"
 	"github.com/jung-kurt/gofpdf/contrib/httpimg"
+	"gopkg.in/ezzarghili/recaptcha-go.v4"
 )
 
 type mail struct {
@@ -409,6 +409,14 @@ func (as *AdminServer) Home(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles("./templates/website/home.html")
 		t.Execute(w, params)
 	case r.Method == "POST":
+		params.Messages = "success"
+		recaptchaResponse := r.FormValue("g-recaptcha-response")
+		captcha, _ := recaptcha.NewReCAPTCHA("6LfsVQUkAAAAAIrxI6-o5JFI9lQUntVTciuGmmsK", recaptcha.V2, 10*time.Second) // for v2 API get your secret from https://www.google.com/recaptcha/admin
+		err := captcha.Verify(recaptchaResponse)
+		if err != nil {
+			params.Messages = "Invalid Captcha"
+		}
+		// proceed
 		m := models.Message{}
 		m.MessageType = r.FormValue("type")
 		m.FirstName = r.FormValue("firstname")
@@ -422,17 +430,13 @@ func (as *AdminServer) Home(w http.ResponseWriter, r *http.Request) {
 		data := models.PostMessage(&m)
 
 		if data != nil {
-			t, _ := template.ParseFiles("./templates/website/home.html")
 			params.Messages = "error"
-			t.Execute(w, params)
 		}
 		t, e := template.ParseFiles("./templates/website/home.html")
 		if e != nil {
 
 		}
-		params.Messages = "success"
 		t.Execute(w, params)
-
 	}
 }
 
@@ -686,7 +690,7 @@ func Flash(w http.ResponseWriter, r *http.Request, t string, m string) {
 	})
 }
 
-//***************
+// ***************
 func (as *AdminServer) Sso(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ffffffffffffff")
 	// func (as *Server) Sso(w http.ResponseWriter, r *http.Request) {
