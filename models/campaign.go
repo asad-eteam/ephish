@@ -546,7 +546,7 @@ func PostCampaign(c *Campaign, uid int64) error {
 	}
 }
 
-//DeleteCampaign deletes the specified campaign
+// DeleteCampaign deletes the specified campaign
 func DeleteCampaign(id int64) error {
 	log.WithFields(logrus.Fields{
 		"campaign_id": id,
@@ -606,7 +606,7 @@ func CompleteCampaign(id int64, uid int64) error {
 }
 
 func SubmitUserCampaign(c *Campaign, uid int64) error {
-	c.URL = "https://whogotphished.com:3000"
+	c.URL = "http://127.0.0.1:3000"
 	p := Page{}
 	t := Template{}
 
